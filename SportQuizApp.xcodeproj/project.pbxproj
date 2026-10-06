@@ -1,0 +1,354 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		032683D67AACE69484A1830B /* SportQuizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665652A7CB5BA98BC67284C9 /* SportQuizApp.swift */; };
+		721EA03DC522B10F326095A5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41E270EFAD1E2EB9C6DE012 /* ContentView.swift */; };
+		CCA334C38A2D9B6303616542 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 098B55E054F104441A1FB30A /* Assets.xcassets */; };
+		E522C550A3C3C2C5E40C275D /* questions.js in Resources */ = {isa = PBXBuildFile; fileRef = E893A64533338A59B2157C04 /* questions.js */; };
+		EF3E7A264C02E648F52480D8 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = F5C16D29A6E2D28DA1BE24CD /* index.html */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		098B55E054F104441A1FB30A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		09D8DFE0C47EA6FA17E7B935 /* SportQuizApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SportQuizApp.entitlements; sourceTree = "<group>"; };
+		665652A7CB5BA98BC67284C9 /* SportQuizApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportQuizApp.swift; sourceTree = "<group>"; };
+		9DE5DA9D26C053CB71C20954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C41E270EFAD1E2EB9C6DE012 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D8F1139B81859F18715D56F0 /* SportQuizApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SportQuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E893A64533338A59B2157C04 /* questions.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = questions.js; sourceTree = "<group>"; };
+		F5C16D29A6E2D28DA1BE24CD /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		76AD2E2096F48793E3F64A69 /* SportQuizApp */ = {
+			isa = PBXGroup;
+			children = (
+				098B55E054F104441A1FB30A /* Assets.xcassets */,
+				C41E270EFAD1E2EB9C6DE012 /* ContentView.swift */,
+				9DE5DA9D26C053CB71C20954 /* Info.plist */,
+				09D8DFE0C47EA6FA17E7B935 /* SportQuizApp.entitlements */,
+				665652A7CB5BA98BC67284C9 /* SportQuizApp.swift */,
+				833FA72D084206471CA79B58 /* Game */,
+			);
+			path = SportQuizApp;
+			sourceTree = "<group>";
+		};
+		833FA72D084206471CA79B58 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				F5C16D29A6E2D28DA1BE24CD /* index.html */,
+				E893A64533338A59B2157C04 /* questions.js */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		A1AF981830978A76A48D1361 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D8F1139B81859F18715D56F0 /* SportQuizApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AC0D20582307653E8754C38F = {
+			isa = PBXGroup;
+			children = (
+				76AD2E2096F48793E3F64A69 /* SportQuizApp */,
+				A1AF981830978A76A48D1361 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6C008830BE9D9A22E38FB848 /* SportQuizApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01E47250EFDD71AF30E36C93 /* Build configuration list for PBXNativeTarget "SportQuizApp" */;
+			buildPhases = (
+				209D313F40DAAA91681EEE74 /* Copier le quiz */,
+				A91B54D812E1CA4BB6D5223F /* Sources */,
+				8F0E16441D294C9CB3174B53 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SportQuizApp;
+			packageProductDependencies = (
+			);
+			productName = SportQuizApp;
+			productReference = D8F1139B81859F18715D56F0 /* SportQuizApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FFE1BE20BD65EAE23E794FB9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					6C008830BE9D9A22E38FB848 = {
+						DevelopmentTeam = 32AK299L44;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 0F8CD51DA02BE0F5B381EB4F /* Build configuration list for PBXProject "SportQuizApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = AC0D20582307653E8754C38F;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A1AF981830978A76A48D1361 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C008830BE9D9A22E38FB848 /* SportQuizApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8F0E16441D294C9CB3174B53 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CCA334C38A2D9B6303616542 /* Assets.xcassets in Resources */,
+				EF3E7A264C02E648F52480D8 /* index.html in Resources */,
+				E522C550A3C3C2C5E40C275D /* questions.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		209D313F40DAAA91681EEE74 /* Copier le quiz */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copier le quiz";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "for f in index.html questions.js; do\n  src=\"$SRCROOT/../sportquiz/$f\"\n  [ -f \"$src\" ] && cp \"$src\" \"$SRCROOT/SportQuizApp/Game/$f\" || true\ndone\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A91B54D812E1CA4BB6D5223F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				721EA03DC522B10F326095A5 /* ContentView.swift in Sources */,
+				032683D67AACE69484A1830B /* SportQuizApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		742F0A069CAF5521BE627E9E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		75C8E71520E878EE5FC80939 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SportQuizApp/SportQuizApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 32AK299L44;
+				INFOPLIST_FILE = SportQuizApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.charlit.sportquiz;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		B3ECF1A7FC2F79A8EB671464 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		CEE0ED09D7D291A3AC778CE6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SportQuizApp/SportQuizApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 32AK299L44;
+				INFOPLIST_FILE = SportQuizApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.charlit.sportquiz;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		01E47250EFDD71AF30E36C93 /* Build configuration list for PBXNativeTarget "SportQuizApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEE0ED09D7D291A3AC778CE6 /* Debug */,
+				75C8E71520E878EE5FC80939 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		0F8CD51DA02BE0F5B381EB4F /* Build configuration list for PBXProject "SportQuizApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				742F0A069CAF5521BE627E9E /* Debug */,
+				B3ECF1A7FC2F79A8EB671464 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FFE1BE20BD65EAE23E794FB9 /* Project object */;
+}

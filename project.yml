@@ -1,0 +1,42 @@
+name: SportQuizApp
+options:
+  bundleIdPrefix: com.charlit
+  deploymentTarget:
+    iOS: "16.0"
+targets:
+  SportQuizApp:
+    type: application
+    platform: iOS
+    sources:
+      - SportQuizApp
+    preBuildScripts:
+      # Recopie le quiz depuis ~/Developer/sportquiz s'il existe, pour qu'il soit embarqué dans l'app.
+      - name: Copier le quiz
+        basedOnDependencyAnalysis: false
+        script: |
+          for f in index.html questions.js; do
+            src="$SRCROOT/../sportquiz/$f"
+            [ -f "$src" ] && cp "$src" "$SRCROOT/SportQuizApp/Game/$f" || true
+          done
+    info:
+      path: SportQuizApp/Info.plist
+      properties:
+        CFBundleDisplayName: Sport Quiz
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UIStatusBarStyle: UIStatusBarStyleLightContent
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    entitlements:
+      path: SportQuizApp/SportQuizApp.entitlements
+      properties:
+        com.apple.developer.game-center: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.charlit.sportquiz
+        DEVELOPMENT_TEAM: 32AK299L44
+        CODE_SIGN_STYLE: Automatic
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"

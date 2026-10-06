@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sport Quiz</title>
+<style>
+  :root { --bg:#0b1d14; --card:#13301f; --line:#24513a; --txt:#eef7f0; --dim:#9db8a6; --acc:#ffd23f; --ok:#2ecc71; --ko:#e74c3c; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; background:radial-gradient(circle at 50% 0, #1d4a31, var(--bg) 70%); color:var(--txt);
+         font:16px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:640px; margin:0 auto; padding:20px 16px 40px; }
+  h1 { font-size:2.2rem; text-align:center; margin:10px 0 4px; letter-spacing:1px; }
+  h1 span { color:var(--acc); }
+  .sub { text-align:center; color:var(--dim); margin:0 0 24px; }
+  .hidden { display:none !important; }
+  .modes { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .mode { background:var(--card); border:2px solid var(--line); border-radius:16px; padding:20px 12px; color:var(--txt);
+          font:inherit; cursor:pointer; text-align:center; transition:transform .1s, border-color .1s; }
+  .mode:hover { transform:translateY(-3px); border-color:var(--acc); }
+  .mode b { display:block; font-size:2.6rem; }
+  .mode strong { display:block; font-size:1.2rem; margin:6px 0 2px; }
+  .mode small { color:var(--dim); }
+  .mode.hard { grid-column:1/-1; background:#2a1216; border-color:#5a2028; }
+  .mode.hard:hover { border-color:var(--ko); }
+  .mode.hc { grid-column:auto; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin-top:20px; }
+  .card h2 { margin:0 0 10px; font-size:1.2rem; }
+  .tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  .tabs button { flex:1 1 30%; white-space:nowrap; padding:8px; border-radius:10px; border:1px solid var(--line); background:transparent; color:var(--dim); font:inherit; cursor:pointer; }
+  .tabs button.on { background:var(--acc); color:#222; border-color:var(--acc); font-weight:700; }
+  table { width:100%; border-collapse:collapse; }
+  td { padding:7px 6px; border-top:1px solid var(--line); }
+  td:first-child { width:2.5em; color:var(--dim); }
+  td:last-child { text-align:right; font-weight:700; color:var(--acc); }
+  tr.me td { background:#2b5a3f; }
+  td.empty { text-align:center; font-weight:400; color:var(--dim); text-align:center; padding:12px; }
+  .rules { color:var(--dim); font-size:.9rem; }
+  /* quiz */
+  .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; color:var(--dim); }
+  .top b { color:var(--acc); font-size:1.3rem; }
+  .quit { margin-left:12px; padding:2px 10px; border-radius:8px; border:1px solid var(--line); background:transparent; color:var(--dim); font:inherit; cursor:pointer; }
+  .bar { height:8px; background:#0006; border-radius:4px; overflow:hidden; }
+  .bar i { display:block; height:100%; background:var(--acc); transition:width .3s; }
+  #timer i { background:var(--ok); transition:none; }
+  .badges { display:flex; gap:8px; margin:16px 0 8px; flex-wrap:wrap; }
+  .badge { padding:3px 10px; border-radius:999px; font-size:.85rem; font-weight:700; background:#0005; }
+  #question { font-size:1.35rem; margin:8px 0 18px; min-height:3em; }
+  .answers { display:grid; gap:10px; }
+  .answers button { padding:14px 16px; border-radius:12px; border:2px solid var(--line); background:var(--card); color:var(--txt);
+                    font:inherit; font-size:1.05rem; text-align:left; cursor:pointer; }
+  .answers button:hover:not(:disabled) { border-color:var(--acc); }
+  .answers button.ok { background:var(--ok); border-color:var(--ok); color:#06210f; font-weight:700; }
+  .answers button.ko { background:var(--ko); border-color:var(--ko); }
+  .answers button:disabled { cursor:default; }
+  .fbbox { display:grid; text-align:center; min-height:1.6em; margin-top:14px; font-weight:700; font-size:1.1rem; }
+  .fbbox > div { grid-area:1/1; } /* résultat et points en jeu au même endroit */
+  /* fin */
+  .big { text-align:center; font-size:3.5rem; font-weight:800; color:var(--acc); margin:6px 0 0; }
+  .center { text-align:center; }
+  form { display:flex; gap:8px; margin-top:12px; }
+  input { flex:1; min-width:0; padding:12px; border-radius:10px; border:2px solid var(--line); background:#0005; color:var(--txt); font:inherit; }
+  .btn { padding:12px 18px; border-radius:10px; border:0; background:var(--acc); color:#222; font:inherit; font-weight:700; cursor:pointer; }
+  .btn.alt { background:transparent; color:var(--txt); border:2px solid var(--line); }
+  .row { display:flex; gap:10px; justify-content:center; margin-top:18px; flex-wrap:wrap; }
+  #saveMsg { color:var(--dim); min-height:1.4em; margin:8px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <section id="home">
+    <h1>SPORT <span>QUIZ</span></h1>
+    <p class="sub">Des questions de plus en plus dures. Réponds vite pour gagner plus !</p>
+    <div class="modes">
+      <button class="mode" data-mode="foot"><b>⚽</b><strong>Spécial Foot</strong><small>Ligue 1, Coupe du monde, Ballon d'or…</small></button>
+      <button class="mode" data-mode="multi"><b>🏆</b><strong>Multisport</strong><small>Foot, tennis, rugby, F1, cyclisme</small></button>
+      <button class="mode hard" data-mode="hard"><b>💀</b><strong>Mode Hard</strong><small>1 seule vie · que des questions Expert et Légende · tous les sports</small></button>
+      <button class="mode hard hc" data-mode="hardfoot"><b>💀⚽</b><strong>Hardcore Foot</strong><small>1 vie · que du foot Expert et Légende</small></button>
+      <button class="mode hard hc" data-mode="hardrugby"><b>💀🏉</b><strong>Hardcore Rugby</strong><small>1 vie · que du rugby Expert et Légende</small></button>
+    </div>
+    <div class="card">
+      <h2>🏅 Classement</h2>
+      <div class="tabs"><button data-tab="foot" class="on">⚽ Foot</button><button data-tab="multi">🏆 Multi</button><button data-tab="hard">💀 Hard</button><button data-tab="hardfoot">💀⚽ HC Foot</button><button data-tab="hardrugby">💀🏉 HC Rugby</button></div>
+      <table id="board"></table>
+    </div>
+    <p class="rules">5 niveaux (Facile → Légende), 3 questions par niveau. Une bonne réponse rapporte jusqu'à 100 points × le niveau
+      (moitié des points si tu réponds au dernier moment). 20 secondes par question.<br>
+      2 vies : une erreur coûte une vie et 50 points × le niveau, la deuxième erreur arrête la partie.<br>
+      Modes Hard et Hardcore : questions sans fin, la première erreur arrête tout, et la vitesse paie double
+      (jusqu'à 200 points × le niveau si tu réponds tout de suite, 20 % au dernier moment).</p>
+  </section>
+
+  <section id="quiz" class="hidden">
+    <div class="top"><span id="count"></span><span><b id="score">0</b><button class="quit" id="quit" aria-label="Quitter la partie">✕</button></span></div>
+    <div class="bar"><i id="progress"></i></div>
+    <div class="badges"><span class="badge" id="level"></span><span class="badge" id="sport"></span></div>
+    <div id="question"></div>
+    <div class="bar" id="timer"><i></i></div>
+    <div class="answers" id="answers" style="margin-top:16px"></div>
+    <div class="fbbox"><div id="stake" aria-hidden="true"></div><div id="feedback" role="status" aria-live="polite"></div></div>
+  </section>
+
+  <section id="end" class="hidden">
+    <h1>Terminé !</h1>
+    <p class="big" id="final"></p>
+    <p class="center" id="summary"></p>
+    <div class="card">
+      <h2>Enregistre ton score</h2>
+      <form id="saveForm">
+        <input id="pseudo" maxlength="16" placeholder="Ton pseudo" required pattern=".*\S.*" title="Écris au moins une lettre" autocomplete="nickname">
+        <button class="btn">Enregistrer</button>
+      </form>
+      <p id="saveMsg"></p>
+      <table id="endBoard"></table>
+    </div>
+    <div class="row"><button class="btn" id="again">Rejouer</button><button class="btn alt" id="toHome">Accueil</button></div>
+  </section>
+</main>
+
+<script src="questions.js"></script>
+<script>
+const LEVELS = ['', 'Facile', 'Moyen', 'Difficile', 'Expert', 'Légende'];
+const LEVEL_COLORS = ['', '#2ecc71', '#3fa7ff', '#ffb02e', '#ff6b3f', '#c56cff'];
+const SPORTS = { foot: '⚽ Foot', tennis: '🎾 Tennis', rugby: '🏉 Rugby', f1: '🏎️ F1', velo: '🚴 Cyclisme' };
+const PER_LEVEL = 3, TIME = 20;
+const HARD = { hard: null, hardfoot: 'foot', hardrugby: 'rugby' }; // modes 1 vie, niveaux 4-5, sans fin (null = tous les sports)
+const NAMES = { foot: 'Spécial Foot', multi: 'Multisport', hard: 'Mode Hard', hardfoot: 'Hardcore Foot', hardrugby: 'Hardcore Rugby' };
+const $ = id => document.getElementById(id);
+const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const show = id => ['home', 'quiz', 'end'].forEach(s => $(s).classList.toggle('hidden', s !== id));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+let mode, deck, idx, score, good, lives, timer, next, t0, saved;
+
+// Dans l'app iOS, le classement passe par Game Center : pas de pseudo, le score part tout seul.
+const GC = !!window.__quizGC;
+let gcName = null;
+
+// Questions déjà posées sur ce navigateur : on ne les repose qu'une fois toutes les autres du même lot épuisées.
+let seen;
+try { seen = new Set(JSON.parse(localStorage.getItem('quiz-seen')) || []); } catch { seen = new Set(); }
+
+function pick(pool, n) {
+  let fresh = pool.filter(q => !seen.has(q[1]));
+  if (fresh.length < n) { pool.forEach(q => seen.delete(q[1])); fresh = pool; } // lot épuisé : on recommence
+  const out = shuffle(fresh).slice(0, n);
+  out.forEach(q => seen.add(q[1]));
+  return out;
+}
+
+function buildDeck(m) {
+  const out = [];
+  if (m in HARD) { // questions niveau 4-5, jamais vues d'abord ; marquées vues quand posées
+    const pool = Object.entries(QUESTIONS).filter(([s]) => !HARD[m] || s === HARD[m]).flatMap(([s, qs]) => qs.filter(q => q[0] >= 4).map(q => [s, q]));
+    let fresh = pool.filter(x => !seen.has(x[1][1]));
+    if (fresh.length < 20) { pool.forEach(x => seen.delete(x[1][1])); fresh = pool; }
+    return shuffle(fresh).concat(shuffle(pool.filter(x => !fresh.includes(x))));
+  }
+  for (let lvl = 1; lvl <= 5; lvl++) {
+    if (m === 'foot') {
+      pick(QUESTIONS.foot.filter(q => q[0] === lvl), PER_LEVEL).forEach(q => out.push(['foot', q]));
+    } else { // 3 sports différents par niveau
+      shuffle(Object.keys(QUESTIONS)).slice(0, PER_LEVEL).forEach(s =>
+        out.push([s, pick(QUESTIONS[s].filter(q => q[0] === lvl), 1)[0]]));
+    }
+  }
+  try { localStorage.setItem('quiz-seen', JSON.stringify([...seen])); } catch {}
+  return out;
+}
+
+// Points d'une bonne réponse selon le temps restant. Hard/Hardcore : 2× si instantané, 0,2× au dernier moment.
+const points = (lvl, left) => Math.round(lvl * 100 * (mode in HARD ? 0.2 + 1.8 * left / TIME : 0.5 + 0.5 * left / TIME) / 10) * 10;
+
+function start(m) {
+  mode = m; deck = buildDeck(m); idx = 0; score = 0; good = 0; lives = m in HARD ? 1 : 2; saved = false;
+  $('score').textContent = 0;
+  show('quiz');
+  ask();
+}
+
+function ask() {
+  const [sport, [lvl, q, ...choices]] = deck[idx];
+  if (mode in HARD) {
+    seen.add(q);
+    try { localStorage.setItem('quiz-seen', JSON.stringify([...seen])); } catch {}
+    $('count').textContent = `💀 Question ${idx + 1} · ❤️ 1 vie`;
+    $('progress').style.width = '0';
+  } else {
+    $('count').textContent = `Question ${idx + 1} / ${deck.length} · ${'❤️'.repeat(lives)}`;
+    $('progress').style.width = (idx / deck.length * 100) + '%';
+  }
+  $('level').textContent = `Niveau ${lvl} · ${LEVELS[lvl]}`;
+  $('level').style.background = LEVEL_COLORS[lvl]; $('level').style.color = '#111';
+  $('sport').textContent = SPORTS[sport];
+  $('question').textContent = q;
+  $('feedback').textContent = ''; $('stake').textContent = '';
+  $('answers').innerHTML = '';
+  shuffle(choices).forEach(c => {
+    const b = document.createElement('button');
+    b.textContent = c;
+    b.onclick = () => answer(b, c === choices[0], lvl);
+    $('answers').append(b);
+  });
+  t0 = performance.now();
+  clearInterval(timer);
+  timer = setInterval(() => {
+    const left = TIME - (performance.now() - t0) / 1000;
+    $('timer').firstElementChild.style.width = Math.max(0, left / TIME * 100) + '%';
+    if (mode in HARD && left > 0) $('stake').textContent = `⚡ ${points(lvl, left)} pts en jeu`; // hors zone annoncée : change 20×/s
+    if (left <= 0) answer(null, false, lvl);
+  }, 50);
+}
+
+function answer(btn, ok, lvl) {
+  clearInterval(timer);
+  $('stake').textContent = '';
+  const left = Math.max(0, TIME - (performance.now() - t0) / 1000);
+  const correct = deck[idx][1][2];
+  [...$('answers').children].forEach(b => { b.disabled = true; if (b.textContent === correct) b.classList.add('ok'); });
+  if (ok) {
+    const pts = points(lvl, left);
+    score += pts; good++;
+    $('score').textContent = score;
+    $('feedback').textContent = `✅ Bravo ! +${pts} points`;
+    $('feedback').style.color = 'var(--ok)';
+  } else {
+    btn?.classList.add('ko');
+    lives--;
+    let msg = btn ? '❌ Raté !' : '⏱️ Temps écoulé !';
+    if (!(mode in HARD)) { // foot / multi : l'erreur coûte la moitié de la valeur de la question
+      const lost = Math.min(score, lvl * 50);
+      score -= lost;
+      $('score').textContent = score;
+      if (lost) msg += ` −${lost} points`;
+    }
+    $('feedback').textContent = msg + (lives ? ` · plus qu'${lives > 1 ? lives + ' vies' : 'une vie'} ❤️` : ' 💀 Game over');
+    $('feedback').style.color = 'var(--ko)';
+  }
+  const over = lives === 0;
+  next = setTimeout(() => !over && ++idx < deck.length ? ask() : finish(), ok ? 1200 : 2200);
+}
+
+function finish() {
+  $('progress').style.width = '100%';
+  $('final').textContent = score + ' pts';
+  if (mode in HARD) {
+    const msg = good >= 25 ? 'Inhumain ! 🐐' : good >= 12 ? 'Énorme ! 🔥' : good >= 5 ? 'Solide ! 💪' : `Le ${NAMES[mode]} porte bien son nom… 💀`;
+    $('summary').textContent = `${good} bonne${good > 1 ? 's' : ''} réponse${good > 1 ? 's' : ''} d'affilée — ${msg} (${NAMES[mode]})`;
+  } else {
+    const msg = good >= 13 ? 'Une légende du sport ! 🐐' : good >= 10 ? 'Excellent ! 🔥' : good >= 6 ? 'Pas mal du tout ! 👍' : 'Il faut réviser ! 📚';
+    $('summary').textContent = `${lives ? '' : `Éliminé à la question ${idx + 1} ! `}${good} / ${deck.length} bonnes réponses — ${msg} (${NAMES[mode]})`;
+  }
+  if (GC) {
+    show('end');
+    if (gcName) { $('saveMsg').textContent = 'Envoi du score…'; sendScore(gcName); }
+    else { $('saveMsg').textContent = 'Connecte-toi à Game Center pour entrer au classement'; loadBoard(mode, $('endBoard')); }
+    return;
+  }
+  $('saveMsg').textContent = '';
+  $('saveForm').classList.remove('hidden');
+  try { $('pseudo').value = localStorage.getItem('quiz-pseudo') || ''; } catch {}
+  show('end');
+  loadBoard(mode, $('endBoard'));
+}
+
+function renderBoard(rows, table, me, m) {
+  table.innerHTML = rows.length ? rows.map((r, i) =>
+    `<tr class="${me && r.name.toLowerCase() === me.toLowerCase() ? 'me' : ''}"><td>${['🥇', '🥈', '🥉'][i] || i + 1}</td>` +
+    `<td>${esc(r.name)} <small style="color:var(--dim)">${m in HARD ? r.good + ' ✔' : r.good + '/15'}</small></td><td>${r.score}</td></tr>`).join('')
+    : '<tr><td colspan="3" class="empty">Personne pour l\'instant… à toi de jouer !</td></tr>';
+}
+
+async function loadBoard(m, table, me) {
+  try {
+    const r = await fetch('api/scores?mode=' + m);
+    if (!r.ok) throw 0;
+    renderBoard(await r.json(), table, me, m);
+  } catch { table.innerHTML = '<tr><td class="empty">Classement indisponible (serveur hors ligne)</td></tr>'; }
+}
+
+$('saveForm').onsubmit = e => {
+  e.preventDefault();
+  if (!saved) sendScore($('pseudo').value.trim());
+};
+
+async function sendScore(name) {
+  saved = true; // bloque les clics répétés pendant l'envoi
+  try {
+    const r = await fetch('api/scores', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, mode, score, good }) });
+    if (!r.ok) throw 0;
+    if (!GC) try { localStorage.setItem('quiz-pseudo', name); } catch {}
+    const rows = await r.json();
+    const rank = rows.findIndex(x => x.name.toLowerCase() === name.toLowerCase()) + 1;
+    $('saveMsg').textContent = rank ? `Enregistré ! Tu es ${rank === 1 ? '1er 🏆' : rank + 'e'} au classement.` : 'Enregistré ! (ton meilleur score est gardé)';
+    $('saveForm').classList.add('hidden');
+    renderBoard(rows, $('endBoard'), name, mode);
+  } catch {
+    saved = false;
+    $('saveMsg').textContent = GC ? 'Classement Game Center indisponible' : "Impossible d'enregistrer, réessaie.";
+    if (GC) loadBoard(mode, $('endBoard'));
+  }
+}
+
+document.querySelectorAll('.mode').forEach(b => b.onclick = () => start(b.dataset.mode));
+document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
+  document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('on', x === b));
+  loadBoard(b.dataset.tab, $('board'));
+});
+$('again').onclick = () => start(mode);
+$('quit').onclick = () => { // abandon : on coupe le chrono et la question suivante déjà programmée
+  if (!confirm('Abandonner la partie ? Le score ne sera pas enregistré.')) return;
+  clearInterval(timer); clearTimeout(next); show('home');
+};
+$('toHome').onclick = () => { show('home'); document.querySelector('[data-tab="' + mode + '"]').click(); };
+loadBoard('foot', $('board'));
+if (GC) {                                        // l'app prévient quand le joueur Game Center change
+  $('saveForm').classList.add('hidden');
+  document.querySelector('#end h2').textContent = 'Classement';
+  window.__quizPlayer = name => { gcName = name; };
+  fetch('api/me').then(r => r.json()).then(r => { gcName = r.name || null; }, () => {});
+}
+</script>
+</body>
+</html>
