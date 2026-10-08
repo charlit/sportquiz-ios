@@ -10,6 +10,7 @@
 		032683D67AACE69484A1830B /* SportQuizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665652A7CB5BA98BC67284C9 /* SportQuizApp.swift */; };
 		721EA03DC522B10F326095A5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41E270EFAD1E2EB9C6DE012 /* ContentView.swift */; };
 		CCA334C38A2D9B6303616542 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 098B55E054F104441A1FB30A /* Assets.xcassets */; };
+		BF36A80AA6E1E3379F1CFFE0 /* clubs.js in Resources */ = {isa = PBXBuildFile; fileRef = EC8853E4F5BC852C1D805787 /* clubs.js */; };
 		E522C550A3C3C2C5E40C275D /* questions.js in Resources */ = {isa = PBXBuildFile; fileRef = E893A64533338A59B2157C04 /* questions.js */; };
 		EF3E7A264C02E648F52480D8 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = F5C16D29A6E2D28DA1BE24CD /* index.html */; };
 /* End PBXBuildFile section */
@@ -21,6 +22,7 @@
 		9DE5DA9D26C053CB71C20954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C41E270EFAD1E2EB9C6DE012 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D8F1139B81859F18715D56F0 /* SportQuizApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SportQuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC8853E4F5BC852C1D805787 /* clubs.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = clubs.js; sourceTree = "<group>"; };
 		E893A64533338A59B2157C04 /* questions.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = questions.js; sourceTree = "<group>"; };
 		F5C16D29A6E2D28DA1BE24CD /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -43,6 +45,7 @@
 			isa = PBXGroup;
 			children = (
 				F5C16D29A6E2D28DA1BE24CD /* index.html */,
+				EC8853E4F5BC852C1D805787 /* clubs.js */,
 				E893A64533338A59B2157C04 /* questions.js */,
 			);
 			path = Game;
@@ -127,6 +130,7 @@
 			files = (
 				CCA334C38A2D9B6303616542 /* Assets.xcassets in Resources */,
 				EF3E7A264C02E648F52480D8 /* index.html in Resources */,
+				BF36A80AA6E1E3379F1CFFE0 /* clubs.js in Resources */,
 				E522C550A3C3C2C5E40C275D /* questions.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,7 +155,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "src=\"$SRCROOT/../sportquiz\"\ndst=\"$SRCROOT/SportQuizApp/Game\"\n[ -f \"$src/index.html\" ] && cp \"$src/index.html\" \"$dst/index.html\"\n# questions.json est la source : on l'embarque sous forme de script (mis à jour ensuite en ligne par l'app)\n[ -f \"$src/questions.json\" ] && { printf 'const QUESTIONS = '; cat \"$src/questions.json\"; printf ';\\n'; } > \"$dst/questions.js\"\ntrue\n";
+			shellScript = "src=\"$SRCROOT/../sportquiz\"\ndst=\"$SRCROOT/SportQuizApp/Game\"\n[ -f \"$src/index.html\" ] && cp \"$src/index.html\" \"$dst/index.html\"\n# questions.json est la source : on l'embarque sous forme de script (mis à jour ensuite en ligne par l'app)\n[ -f \"$src/questions.json\" ] && { printf 'const QUESTIONS = '; cat \"$src/questions.json\"; printf ';\\n'; } > \"$dst/questions.js\"\n[ -f \"$src/clubs.json\" ] && { printf 'const CLUBS = '; cat \"$src/clubs.json\"; printf ';\\n'; } > \"$dst/clubs.js\"\ntrue\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
