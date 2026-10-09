@@ -24,7 +24,7 @@ targets:
     info:
       path: SportQuizApp/Info.plist
       properties:
-        CFBundleDisplayName: Sport Quiz
+        CFBundleDisplayName: Football Quiz
         UILaunchScreen:
           UIColorName: LaunchBackground
         UIStatusBarStyle: UIStatusBarStyleLightContent
