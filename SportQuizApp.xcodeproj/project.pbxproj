@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		032683D67AACE69484A1830B /* SportQuizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665652A7CB5BA98BC67284C9 /* SportQuizApp.swift */; };
 		721EA03DC522B10F326095A5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41E270EFAD1E2EB9C6DE012 /* ContentView.swift */; };
+		9A342E32948150685A163C23 /* clubs.js in Resources */ = {isa = PBXBuildFile; fileRef = 9F352E2126E8DB493880B319 /* clubs.js */; };
 		CCA334C38A2D9B6303616542 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 098B55E054F104441A1FB30A /* Assets.xcassets */; };
-		BF36A80AA6E1E3379F1CFFE0 /* clubs.js in Resources */ = {isa = PBXBuildFile; fileRef = EC8853E4F5BC852C1D805787 /* clubs.js */; };
 		E522C550A3C3C2C5E40C275D /* questions.js in Resources */ = {isa = PBXBuildFile; fileRef = E893A64533338A59B2157C04 /* questions.js */; };
 		EF3E7A264C02E648F52480D8 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = F5C16D29A6E2D28DA1BE24CD /* index.html */; };
 /* End PBXBuildFile section */
@@ -20,9 +20,9 @@
 		09D8DFE0C47EA6FA17E7B935 /* SportQuizApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SportQuizApp.entitlements; sourceTree = "<group>"; };
 		665652A7CB5BA98BC67284C9 /* SportQuizApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportQuizApp.swift; sourceTree = "<group>"; };
 		9DE5DA9D26C053CB71C20954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9F352E2126E8DB493880B319 /* clubs.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = clubs.js; sourceTree = "<group>"; };
 		C41E270EFAD1E2EB9C6DE012 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D8F1139B81859F18715D56F0 /* SportQuizApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SportQuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		EC8853E4F5BC852C1D805787 /* clubs.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = clubs.js; sourceTree = "<group>"; };
 		E893A64533338A59B2157C04 /* questions.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = questions.js; sourceTree = "<group>"; };
 		F5C16D29A6E2D28DA1BE24CD /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -44,8 +44,8 @@
 		833FA72D084206471CA79B58 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				9F352E2126E8DB493880B319 /* clubs.js */,
 				F5C16D29A6E2D28DA1BE24CD /* index.html */,
-				EC8853E4F5BC852C1D805787 /* clubs.js */,
 				E893A64533338A59B2157C04 /* questions.js */,
 			);
 			path = Game;
@@ -129,8 +129,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCA334C38A2D9B6303616542 /* Assets.xcassets in Resources */,
+				9A342E32948150685A163C23 /* clubs.js in Resources */,
 				EF3E7A264C02E648F52480D8 /* index.html in Resources */,
-				BF36A80AA6E1E3379F1CFFE0 /* clubs.js in Resources */,
 				E522C550A3C3C2C5E40C275D /* questions.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
