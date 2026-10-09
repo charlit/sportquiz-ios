@@ -10,15 +10,20 @@ targets:
     sources:
       - SportQuizApp
     preBuildScripts:
-      # Recopie le quiz depuis ~/Developer/sportquiz s'il existe (index.html + questions.json/clubs.json -> .js).
+      # Recopie le quiz depuis ~/Developer/sportquiz s'il existe (index.html + questions/<sport>.json et clubs.json -> .js).
       - name: Copier le quiz
         basedOnDependencyAnalysis: false
         script: |
           src="$SRCROOT/../sportquiz"
           dst="$SRCROOT/SportQuizApp/Game"
           [ -f "$src/index.html" ] && cp "$src/index.html" "$dst/index.html"
-          # questions.json est la source : on l'embarque sous forme de script (mis à jour ensuite en ligne par l'app)
-          [ -f "$src/questions.json" ] && { printf 'const QUESTIONS = '; cat "$src/questions.json"; printf ';\n'; } > "$dst/questions.js"
+          # questions/<sport>.json sont la source (un fichier par sport) : on les réunit dans un script { sport: [...] }
+          # (mis à jour ensuite en ligne par l'app)
+          if [ -d "$src/questions" ]; then
+            { printf 'const QUESTIONS = {'; sep=''
+              for f in "$src"/questions/*.json; do printf '%s"%s":' "$sep" "$(basename "$f" .json)"; cat "$f"; sep=','; done
+              printf '};\n'; } > "$dst/questions.js"
+          fi
           [ -f "$src/clubs.json" ] && { printf 'const CLUBS = '; cat "$src/clubs.json"; printf ';\n'; } > "$dst/clubs.js"
           true
     info:
