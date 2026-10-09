@@ -8,6 +8,9 @@ import GameKit
 let quizModes: Set<String> = ["foot", "multi", "hard", "hardfoot", "hardrugby", "hardbasket", "hardtennis", "hardf1", "hardvelo",
                                "hardfr", "hardes", "harduk", "hardde", "hardit", "hardwc", "hardcan"]
 func leaderboardID(_ mode: String) -> String { "sportquiz.\(mode)" }
+// Badges → succès Game Center : désactivé pour la 1re version (les succès ne sont pas encore créés dans App Store Connect).
+// Le quiz renvoie tous ses badges à chaque connexion : ceux gagnés d'ici là seront reportés dès que ce sera activé.
+let reportsAchievements = false
 
 private let quizBackground = UIColor(red: 0x0a / 255, green: 0x12 / 255, blue: 0x20 / 255, alpha: 1)
 
@@ -212,6 +215,8 @@ final class QuizSchemeHandler: NSObject, WKURLSchemeHandler {
         switch (url.path, request.httpMethod ?? "GET") {
         case ("/api/me", _):
             return gc.playerName.map { ["name": $0] } ?? [:]
+        case ("/api/achievements", "POST") where !reportsAchievements:
+            return [:]
         case ("/api/achievements", "POST"):
             guard let json = try JSONSerialization.jsonObject(with: Self.body(request)) as? [String: Any],
                   let ids = json["ids"] as? [String], gc.playerName != nil else { throw URLError(.userAuthenticationRequired) }

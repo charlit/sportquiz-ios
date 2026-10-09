@@ -30,6 +30,10 @@ targets:
       path: SportQuizApp/Info.plist
       properties:
         CFBundleDisplayName: Football Quiz
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        # Seul du HTTPS standard (téléchargement des questions) : pas de chiffrement à déclarer à chaque envoi
+        ITSAppUsesNonExemptEncryption: false
         UILaunchScreen:
           UIColorName: LaunchBackground
         UIStatusBarStyle: UIStatusBarStyleLightContent
@@ -43,6 +47,9 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.charlit.sportquiz
+        # Version affichée sur l'App Store, et numéro de build à augmenter à chaque envoi à App Store Connect
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
         DEVELOPMENT_TEAM: 32AK299L44
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
