@@ -62,6 +62,7 @@ struct QuizWebView: UIViewRepresentable {
         }
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.uiDelegate = context.coordinator
+        webView.navigationDelegate = context.coordinator
         webView.isOpaque = false
         webView.backgroundColor = quizBackground
         webView.scrollView.backgroundColor = quizBackground
@@ -76,8 +77,19 @@ struct QuizWebView: UIViewRepresentable {
     func updateUIView(_ webView: WKWebView, context: Context) {}
 
     // Sans ce délégué, confirm() (« Abandonner la partie ? ») répond toujours non dans une WKWebView.
-    final class Coordinator: NSObject, WKUIDelegate, WKScriptMessageHandler {
+    final class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler {
         let scheme = QuizSchemeHandler()
+
+        // Les liens hors du quiz (mailto: du bouton de contact, http…) s'ouvrent dans l'app iOS adaptée :
+        // la WKWebView ne sait pas les charger elle-même et le clic resterait sans effet.
+        func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction,
+                     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            guard let url = action.request.url, let scheme = url.scheme, scheme != "sportquiz", scheme != "about" else {
+                return decisionHandler(.allow)
+            }
+            UIApplication.shared.open(url)
+            decisionHandler(.cancel)
+        }
 
         func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
             print("[quiz]", message.body)
