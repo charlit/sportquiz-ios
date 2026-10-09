@@ -142,9 +142,10 @@ final class GameCenter {
         }
     }
 
-    // Le nombre de bonnes réponses voyage dans le « context » du score Game Center.
-    func submit(mode: String, score: Int, good: Int) async throws {
-        try await GKLeaderboard.submitScore(score, context: good, player: GKLocalPlayer.local,
+    // Le « context » du score Game Center porte le nombre de bonnes réponses et celui des badges : badges × 1000 + bonnes.
+    // Game Center ne garde que le meilleur score : le nombre de badges affiché est celui du jour de ce record.
+    func submit(mode: String, score: Int, good: Int, badges: Int) async throws {
+        try await GKLeaderboard.submitScore(score, context: badges * 1000 + good % 1000, player: GKLocalPlayer.local,
                                             leaderboardIDs: [leaderboardID(mode)])
     }
 
@@ -165,7 +166,7 @@ final class GameCenter {
         guard let board = try await GKLeaderboard.loadLeaderboards(IDs: [leaderboardID(mode)]).first else { return [] }
         let (_, entries, _) = try await board.loadEntries(for: .global, timeScope: .allTime,
                                                           range: NSRange(location: 1, length: n))
-        return entries.map { ["name": $0.player.displayName, "score": $0.score, "good": $0.context] }
+        return entries.map { ["name": $0.player.displayName, "score": $0.score, "good": $0.context % 1000, "badges": $0.context / 1000] }
     }
 }
 
@@ -221,15 +222,18 @@ final class QuizSchemeHandler: NSObject, WKURLSchemeHandler {
                   let mode = json["mode"] as? String, quizModes.contains(mode),
                   let score = json["score"] as? Int, let good = json["good"] as? Int,
                   let name = gc.playerName else { throw URLError(.badURL) }
-            try await gc.submit(mode: mode, score: score, good: good)
+            let badges = max(0, json["badges"] as? Int ?? 0)
+            try await gc.submit(mode: mode, score: score, good: good, badges: badges)
             // Game Center met parfois quelques secondes à refléter un nouveau score : on l'ajoute nous-mêmes.
             var rows = try await gc.top(mode: mode)
             let mine = rows.firstIndex { ($0["name"] as? String) == name }
             if mine == nil || (rows[mine!]["score"] as? Int ?? 0) < score {
                 if let mine { rows.remove(at: mine) }
-                rows.append(["name": name, "score": score, "good": good])
+                rows.append(["name": name, "score": score, "good": good, "badges": badges])
                 rows.sort { ($0["score"] as? Int ?? 0) > ($1["score"] as? Int ?? 0) }
                 rows = Array(rows.prefix(20))
+            } else if let mine {
+                rows[mine]["badges"] = badges   // au moins sur cet écran, le joueur voit son nombre de badges à jour
             }
             return rows
         case ("/api/scores", _):
