@@ -5,7 +5,8 @@ import GameKit
 // Le quiz est embarqué dans l'app (Game/index.html + questions.js) ; le classement passe par
 // Game Center, un classement par mode. Ces classements doivent exister dans App Store Connect
 // avec les identifiants sportquiz.<mode>, au format « Entier ».
-let quizModes: Set<String> = ["foot", "multi", "hard", "hardfoot", "hardrugby", "hardbasket", "hardtennis", "hardf1", "hardvelo"]
+let quizModes: Set<String> = ["foot", "multi", "hard", "hardfoot", "hardrugby", "hardbasket", "hardtennis", "hardf1", "hardvelo",
+                               "hardfr", "hardes", "harduk", "hardde", "hardit", "hardwc", "hardcan"]
 func leaderboardID(_ mode: String) -> String { "sportquiz.\(mode)" }
 
 private let quizBackground = UIColor(red: 0x0a / 255, green: 0x12 / 255, blue: 0x20 / 255, alpha: 1)
