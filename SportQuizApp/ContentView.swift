@@ -1,6 +1,7 @@
 import SwiftUI
 import WebKit
 import GameKit
+import StoreKit
 
 // Le quiz est embarqué dans l'app (Game/index.html + questions.js) ; le classement passe par
 // Game Center, un classement par mode. Ces classements doivent exister dans App Store Connect
@@ -64,7 +65,10 @@ struct QuizWebView: UIViewRepresentable {
             config.userContentController.addUserScript(
                 WKUserScript(source: diagnosticScript, injectionTime: .atDocumentStart, forMainFrameOnly: true))
         }
+        config.userContentController.add(context.coordinator, name: "app")   // vibrations, partage, Game Center, avis
         let webView = WKWebView(frame: .zero, configuration: config)
+        webView.allowsLinkPreview = false   // pas d'aperçu de lien sur un appui long : comportement d'app, pas de page web
+        context.coordinator.webView = webView
         webView.uiDelegate = context.coordinator
         webView.navigationDelegate = context.coordinator
         webView.isOpaque = false
@@ -81,8 +85,30 @@ struct QuizWebView: UIViewRepresentable {
     func updateUIView(_ webView: WKWebView, context: Context) {}
 
     // Sans ce délégué, confirm() (« Abandonner la partie ? ») répond toujours non dans une WKWebView.
-    final class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler {
+    final class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler, GKGameCenterControllerDelegate {
         let scheme = QuizSchemeHandler()
+        weak var webView: WKWebView?
+        private var loaded = false
+        private var shortcutObserver: NSObjectProtocol?
+
+        override init() {
+            super.init()
+            shortcutObserver = NotificationCenter.default.addObserver(forName: Shortcuts.received, object: nil, queue: .main) { [weak self] _ in
+                self?.runPendingShortcut()
+            }
+        }
+
+        // Raccourci de l'icône : exécuté dès que la page est prête (au lancement, elle ne l'est pas encore).
+        private func runPendingShortcut() {
+            guard loaded, let action = Shortcuts.pending else { return }
+            Shortcuts.pending = nil
+            webView?.evaluateJavaScript("window.__quizShortcut && __quizShortcut('\(action)')")
+        }
+
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            loaded = true
+            runPendingShortcut()
+        }
 
         // Les liens hors du quiz (mailto: du bouton de contact, http…) s'ouvrent dans l'app iOS adaptée :
         // la WKWebView ne sait pas les charger elle-même et le clic resterait sans effet.
@@ -96,7 +122,40 @@ struct QuizWebView: UIViewRepresentable {
         }
 
         func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
-            print("[quiz]", message.body)
+            guard message.name == "app", let body = message.body as? [String: Any], let type = body["type"] as? String else {
+                return print("[quiz]", message.body)
+            }
+            switch type {
+            case "haptic":   // bonne réponse, erreur, badge
+                switch body["kind"] as? String {
+                case "success": UINotificationFeedbackGenerator().notificationOccurred(.success)
+                case "warning": UINotificationFeedbackGenerator().notificationOccurred(.warning)
+                case "error": UINotificationFeedbackGenerator().notificationOccurred(.error)
+                default: UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                }
+            case "share":    // feuille de partage iOS (Messages, WhatsApp, Instagram…)
+                var items: [Any] = [body["text"] as? String ?? ""]
+                if let url = (body["url"] as? String).flatMap(URL.init(string:)) { items.append(url) }
+                let sheet = UIActivityViewController(activityItems: items, applicationActivities: nil)
+                if let webView { sheet.popoverPresentationController?.sourceView = webView }
+                if let webView { present(sheet, from: webView, orElse: {}) }
+            case "gameCenter":   // écran Game Center natif, ouvert sur le classement affiché
+                guard GKLocalPlayer.local.isAuthenticated, let webView else { return }
+                let mode = body["mode"] as? String ?? "foot"
+                let gc = quizModes.contains(mode)
+                    ? GKGameCenterViewController(leaderboardID: leaderboardID(mode), playerScope: .global, timeScope: .allTime)
+                    : GKGameCenterViewController(state: .leaderboards)
+                gc.gameCenterDelegate = self
+                present(gc, from: webView, orElse: {})
+            case "review":   // demande d'avis App Store (iOS limite son affichage à 3 fois par an)
+                if let scene = webView?.window?.windowScene { SKStoreReviewController.requestReview(in: scene) }
+            default:
+                print("[quiz] message inconnu", type)
+            }
+        }
+
+        func gameCenterViewControllerDidFinish(_ controller: GKGameCenterViewController) {
+            controller.dismiss(animated: true)
         }
 
         func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String,
@@ -116,7 +175,7 @@ struct QuizWebView: UIViewRepresentable {
 
         // Présente l'alerte au-dessus de ce qui est déjà affiché (ex. une feuille Game Center).
         // Si c'est impossible, on répond tout de suite : sinon la page reste figée à attendre la réponse.
-        private func present(_ alert: UIAlertController, from view: UIView, orElse fallback: @escaping () -> Void) {
+        private func present(_ alert: UIViewController, from view: UIView, orElse fallback: @escaping () -> Void) {
             var top = view.window?.rootViewController
             while let next = top?.presentedViewController, !next.isBeingDismissed { top = next }
             guard let top, top.viewIfLoaded?.window != nil, !top.isBeingDismissed else {

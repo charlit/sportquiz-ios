@@ -16,7 +16,7 @@ let shots: [(String, [String: String], String)] = [
     ("2-question", ["quiz-badges": badges], "start('foot'); idx = 41; score = 8340; good = 39; lives = 2; $('score').textContent = score; ask();"),
     ("3-aventure-carte", ["quiz-adv": js(states["partial"]!), "quiz-badges": badges], "advLand = 'fr'; cityFilter = null; openClubs();"),
     ("4-aventure-pays", ["quiz-adv": js(states["frdone"]!), "quiz-adv-open": js(["fr", "es"]), "quiz-badges": badges], "openLands();"),
-    ("5-classement", ["quiz-badges": badges], "show('ranks'); renderBoard(\(rows), $('board'), 'Toi', 'foot');"),
+    ("5-classement", ["quiz-badges": badges], "__quizPlayer('Toi'); window.fetch = async () => ({ ok: true, json: async () => \(rows) }); show('ranks'); openBoard('foot');"),
     ("6-badges", ["quiz-badges": badges], "window.__quizPlayer && __quizPlayer('Toi'); $('goBadges').click();"),
 ]
 

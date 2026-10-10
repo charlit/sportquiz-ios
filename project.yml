@@ -40,6 +40,20 @@ targets:
         UIViewControllerBasedStatusBarAppearance: false
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        # Raccourcis de l'icône (appui long sur l'écran d'accueil), gérés dans SportQuizApp.swift
+        UIApplicationShortcutItems:
+          - UIApplicationShortcutItemType: com.charlit.sportquiz.foot
+            UIApplicationShortcutItemTitle: Spécial Foot
+            UIApplicationShortcutItemIconSymbolName: soccerball
+          - UIApplicationShortcutItemType: com.charlit.sportquiz.hard
+            UIApplicationShortcutItemTitle: Hardcore
+            UIApplicationShortcutItemIconSymbolName: flame.fill
+          - UIApplicationShortcutItemType: com.charlit.sportquiz.adv
+            UIApplicationShortcutItemTitle: Aventure
+            UIApplicationShortcutItemIconSymbolName: map.fill
+          - UIApplicationShortcutItemType: com.charlit.sportquiz.ranks
+            UIApplicationShortcutItemTitle: Classement
+            UIApplicationShortcutItemIconSymbolName: trophy.fill
     entitlements:
       path: SportQuizApp/SportQuizApp.entitlements
       properties:

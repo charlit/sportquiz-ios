@@ -22,6 +22,41 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>soccerball</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Spécial Foot</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.charlit.sportquiz.foot</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>flame.fill</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Hardcore</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.charlit.sportquiz.hard</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>map.fill</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Aventure</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.charlit.sportquiz.adv</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>trophy.fill</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Classement</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.charlit.sportquiz.ranks</string>
+		</dict>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
