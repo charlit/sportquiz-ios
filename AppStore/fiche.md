@@ -1,18 +1,20 @@
 # Football Quiz – fiche App Store (v1.0)
 
 ## Nom (30 max)
-Football Quiz
+Football Quiz – Culture Foot
 
-Si le nom est déjà pris : Football Quiz : Foot & Clubs
+(« Football Quiz » seul était déjà pris. Sous l'icône, l'app reste « Football Quiz ».)
 
 ## Sous-titre (30 max)
-Teste ta culture foot !
+Clubs, Coupe du monde et CAN
 
 ## Texte promotionnel (170 max, modifiable sans nouvelle version)
 Plus de 4 000 questions sur le foot, des clubs aux Coupes du monde. Débloque les pays de l'Aventure un par un et grimpe au classement Game Center !
 
 ## Mots-clés (100 max, séparés par des virgules, sans espace)
-quiz,foot,football,trivia,culture,questions,club,coupe du monde,can,afrique,ballon,joueurs,sport,jeu
+trivia,questions,afrique,ballon,joueurs,sport,jeu,mondial,ligue,europe,défi,histoire,buteur,match,équipe
+
+(Les mots du nom et du sous-titre – football, quiz, culture, foot, clubs, coupe du monde, CAN – sont déjà pris en compte par la recherche : inutile de les répéter.)
 
 ## Description (4 000 max)
 Tu penses tout savoir sur le foot ? Prouve-le !
