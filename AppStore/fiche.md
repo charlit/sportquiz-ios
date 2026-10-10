@@ -12,7 +12,7 @@ Clubs, Coupe du monde et CAN
 Plus de 4 000 questions sur le foot, des clubs aux Coupes du monde. Débloque les pays de l'Aventure un par un et grimpe au classement Game Center !
 
 ## Mots-clés (100 max, séparés par des virgules, sans espace)
-trivia,questions,afrique,ballon,joueurs,sport,jeu,mondial,ligue,europe,défi,histoire,buteur,match,équipe
+trivia,questions,afrique,ballon,joueurs,sport,jeu,mondial,ligue,europe,défi,histoire,buteur,match
 
 (Les mots du nom et du sous-titre – football, quiz, culture, foot, clubs, coupe du monde, CAN – sont déjà pris en compte par la recherche : inutile de les répéter.)
 
