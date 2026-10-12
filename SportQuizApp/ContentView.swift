@@ -7,7 +7,8 @@ import StoreKit
 // Game Center, un classement par mode. Ces classements doivent exister dans App Store Connect
 // avec les identifiants sportquiz.<mode>, au format « Entier ».
 let quizModes: Set<String> = ["foot", "multi", "hard", "hardfoot", "hardrugby", "hardbasket", "hardtennis", "hardf1", "hardvelo",
-                               "hardfr", "hardes", "harduk", "hardde", "hardit", "hardwc", "hardcan"]
+                               "hardfr", "hardes", "harduk", "hardde", "hardit", "hardwc", "hardcan",
+                               "semaine"]   // défi de la semaine : classement Game Center récurrent, remis à zéro chaque lundi
 func leaderboardID(_ mode: String) -> String { "sportquiz.\(mode)" }
 // Badges → succès Game Center : désactivé pour la 1re version (les succès ne sont pas encore créés dans App Store Connect).
 // Le quiz renvoie tous ses badges à chaque connexion : ceux gagnés d'ici là seront reportés dès que ce sera activé.
@@ -60,6 +61,11 @@ struct QuizWebView: UIViewRepresentable {
         config.setURLSchemeHandler(context.coordinator.scheme, forURLScheme: "sportquiz")
         config.userContentController.addUserScript(
             WKUserScript(source: "window.__quizGC = true;", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        // Pas de zoom dans l'app (pincement ni double appui) : page à taille fixe, comme une app native
+        config.userContentController.addUserScript(WKUserScript(source: """
+            document.querySelector('meta[name=viewport]')?.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+            document.head.insertAdjacentHTML('beforeend', '<style>html { touch-action: manipulation; }</style>');
+            """, injectionTime: .atDocumentEnd, forMainFrameOnly: true))
         if ProcessInfo.processInfo.environment["QUIZ_DIAGNOSTIC"] != nil {
             config.userContentController.add(context.coordinator, name: "diag")
             config.userContentController.addUserScript(
@@ -74,6 +80,10 @@ struct QuizWebView: UIViewRepresentable {
         webView.isOpaque = false
         webView.backgroundColor = quizBackground
         webView.scrollView.backgroundColor = quizBackground
+        webView.scrollView.minimumZoomScale = 1
+        webView.scrollView.maximumZoomScale = 1
+        webView.scrollView.pinchGestureRecognizer?.isEnabled = false
+        webView.scrollView.delegate = context.coordinator
         webView.load(URLRequest(url: url))
         GameCenter.shared.authenticate { [weak webView] name in
             let arg = name.flatMap { try? String(data: JSONEncoder().encode($0), encoding: .utf8) } ?? "null"
@@ -85,7 +95,7 @@ struct QuizWebView: UIViewRepresentable {
     func updateUIView(_ webView: WKWebView, context: Context) {}
 
     // Sans ce délégué, confirm() (« Abandonner la partie ? ») répond toujours non dans une WKWebView.
-    final class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler, GKGameCenterControllerDelegate {
+    final class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler, GKGameCenterControllerDelegate, UIScrollViewDelegate {
         let scheme = QuizSchemeHandler()
         weak var webView: WKWebView?
         private var loaded = false
@@ -153,6 +163,9 @@ struct QuizWebView: UIViewRepresentable {
                 print("[quiz] message inconnu", type)
             }
         }
+
+        // Refuse tout zoom de la page (le pincement est déjà coupé, ceci couvre les autres cas)
+        func viewForZooming(in scrollView: UIScrollView) -> UIView? { nil }
 
         func gameCenterViewControllerDidFinish(_ controller: GKGameCenterViewController) {
             controller.dismiss(animated: true)
@@ -237,7 +250,8 @@ final class GameCenter {
 final class QuizSchemeHandler: NSObject, WKURLSchemeHandler {
     private static let files = ["index.html": "text/html; charset=utf-8",
                                 "questions.js": "text/javascript; charset=utf-8",
-                                "clubs.js": "text/javascript; charset=utf-8"]
+                                "clubs.js": "text/javascript; charset=utf-8",
+                                "semaine.js": "text/javascript; charset=utf-8"]
     private var active = Set<ObjectIdentifier>()   // tâches non annulées (accès sur le main thread)
 
     func webView(_ webView: WKWebView, start task: WKURLSchemeTask) {

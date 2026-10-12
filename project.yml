@@ -10,7 +10,7 @@ targets:
     sources:
       - SportQuizApp
     preBuildScripts:
-      # Recopie le quiz depuis ~/Developer/sportquiz s'il existe (index.html + questions/<sport>.json et clubs.json -> .js).
+      # Recopie le quiz depuis ~/Developer/sportquiz s'il existe (index.html + questions/<sport>.json, clubs.json et semaine.json -> .js).
       - name: Copier le quiz
         basedOnDependencyAnalysis: false
         script: |
@@ -25,6 +25,7 @@ targets:
               printf '};\n'; } > "$dst/questions.js"
           fi
           [ -f "$src/clubs.json" ] && { printf 'const CLUBS = '; cat "$src/clubs.json"; printf ';\n'; } > "$dst/clubs.js"
+          [ -f "$src/semaine.json" ] && { printf 'const SEMAINE = '; cat "$src/semaine.json"; printf ';\n'; } > "$dst/semaine.js"
           true
     info:
       path: SportQuizApp/Info.plist
