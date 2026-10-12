@@ -14,6 +14,9 @@ func leaderboardID(_ mode: String) -> String { "sportquiz.\(mode)" }
 // Le quiz renvoie tous ses badges à chaque connexion : ceux gagnés d'ici là seront reportés dès que ce sera activé.
 let reportsAchievements = false
 
+// Version affichée en bas du profil, ex. « 1.0 (3) » (version App Store et numéro de build)
+private let appVersion = "\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"))"
+
 private let quizBackground = UIColor(red: 0x0a / 255, green: 0x12 / 255, blue: 0x20 / 255, alpha: 1)
 
 // Diagnostic (variable d'environnement QUIZ_DIAGNOSTIC, ex. DEVICECTL_CHILD_QUIZ_DIAGNOSTIC=1 xcrun devicectl
@@ -60,7 +63,7 @@ struct QuizWebView: UIViewRepresentable {
         let config = WKWebViewConfiguration()
         config.setURLSchemeHandler(context.coordinator.scheme, forURLScheme: "sportquiz")
         config.userContentController.addUserScript(
-            WKUserScript(source: "window.__quizGC = true;", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+            WKUserScript(source: "window.__quizGC = true; window.__appVersion = \"\(appVersion)\";", injectionTime: .atDocumentStart, forMainFrameOnly: true))
         // Pas de zoom dans l'app (pincement ni double appui) : page à taille fixe, comme une app native
         config.userContentController.addUserScript(WKUserScript(source: """
             document.querySelector('meta[name=viewport]')?.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
