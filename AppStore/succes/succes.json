@@ -1,0 +1,205 @@
+[
+ {
+  "id": "first",
+  "emoji": "🎮",
+  "name": "Première partie",
+  "desc": "Jouer une partie jusqu'au bout",
+  "points": 10
+ },
+ {
+  "id": "perfect",
+  "emoji": "🎯",
+  "name": "Sans faute",
+  "desc": "Finir le Spécial Foot sans aucune erreur",
+  "points": 50
+ },
+ {
+  "id": "semaine",
+  "emoji": "📅",
+  "name": "Défi parfait",
+  "desc": "Répondre juste aux 10 questions d'un défi de la semaine",
+  "points": 40
+ },
+ {
+  "id": "avantmatch",
+  "emoji": "⚡",
+  "name": "Échauffé",
+  "desc": "Faire un sans-faute à un quiz d'avant-match",
+  "points": 20
+ },
+ {
+  "id": "derbies",
+  "emoji": "⚔️",
+  "name": "Roi des derbies",
+  "desc": "Réussir sans faute tous les derbies des cinq pays",
+  "points": 75
+ },
+ {
+  "id": "reflex",
+  "emoji": "⚡",
+  "name": "Réflexe",
+  "desc": "Bonne réponse en moins de 2 secondes",
+  "points": 10
+ },
+ {
+  "id": "streak",
+  "emoji": "🔥",
+  "name": "Série",
+  "desc": "10 bonnes réponses d'affilée en Hardcore",
+  "points": 20
+ },
+ {
+  "id": "supporter",
+  "emoji": "📣",
+  "name": "Supporter",
+  "desc": "Finir les 10 étapes d'un club de l'Aventure",
+  "points": 20
+ },
+ {
+  "id": "tour",
+  "emoji": "🇫🇷",
+  "name": "Tour de France des clubs",
+  "desc": "Finir les 18 clubs français de l'Aventure",
+  "points": 60
+ },
+ {
+  "id": "liga",
+  "emoji": "🇪🇸",
+  "name": "Vuelta des clubs",
+  "desc": "Finir les 10 clubs espagnols de l'Aventure",
+  "points": 40
+ },
+ {
+  "id": "albion",
+  "emoji": "🇬🇧",
+  "name": "Tour du Royaume-Uni",
+  "desc": "Finir les 10 clubs britanniques de l'Aventure",
+  "points": 40
+ },
+ {
+  "id": "bundes",
+  "emoji": "🇩🇪",
+  "name": "Tour d'Allemagne",
+  "desc": "Finir les 10 clubs allemands de l'Aventure",
+  "points": 40
+ },
+ {
+  "id": "calcio",
+  "emoji": "🇮🇹",
+  "name": "Giro des clubs",
+  "desc": "Finir les 10 clubs italiens de l'Aventure",
+  "points": 40
+ },
+ {
+  "id": "globe",
+  "emoji": "🌍",
+  "name": "Globe-trotter",
+  "desc": "Finir un club dans chacun des cinq pays de l'Aventure",
+  "points": 40
+ },
+ {
+  "id": "mondial",
+  "emoji": "🏆",
+  "name": "Champion du monde",
+  "desc": "Finir les 5 étapes d'une Coupe du monde de l'Aventure",
+  "points": 20
+ },
+ {
+  "id": "memoire",
+  "emoji": "📚",
+  "name": "Mémoire du Mondial",
+  "desc": "Finir les 12 Coupes du monde de l'Aventure",
+  "points": 60
+ },
+ {
+  "id": "can",
+  "emoji": "🦁",
+  "name": "Lion d'Afrique",
+  "desc": "Finir les 5 étapes d'une CAN de l'Aventure",
+  "points": 20
+ },
+ {
+  "id": "canall",
+  "emoji": "📜",
+  "name": "Mémoire de la CAN",
+  "desc": "Finir les 14 CAN de l'Aventure",
+  "points": 60
+ },
+ {
+  "id": "marathon",
+  "emoji": "🏃",
+  "name": "Marathon",
+  "desc": "Aller au bout des 100 questions du Spécial Foot",
+  "points": 30
+ },
+ {
+  "id": "beast",
+  "emoji": "💀",
+  "name": "Increvable",
+  "desc": "25 bonnes réponses d'affilée en Hardcore",
+  "points": 50
+ },
+ {
+  "id": "footscore",
+  "emoji": "🥇",
+  "name": "Légende du foot",
+  "desc": "Marquer 20 000 points au Spécial Foot",
+  "points": 50
+ },
+ {
+  "id": "hardfoot",
+  "emoji": "⚽",
+  "name": "Maître du ballon rond",
+  "desc": "15 bonnes réponses d'affilée en Hardcore Foot",
+  "points": 30
+ },
+ {
+  "id": "hardfr",
+  "emoji": "🇫🇷",
+  "name": "Coq d'or",
+  "desc": "15 bonnes réponses d'affilée en Hardcore France",
+  "points": 25
+ },
+ {
+  "id": "hardes",
+  "emoji": "🇪🇸",
+  "name": "Pichichi",
+  "desc": "15 bonnes réponses d'affilée en Hardcore Espagne",
+  "points": 25
+ },
+ {
+  "id": "harduk",
+  "emoji": "🇬🇧",
+  "name": "Roi d'Albion",
+  "desc": "15 bonnes réponses d'affilée en Hardcore Royaume-Uni",
+  "points": 25
+ },
+ {
+  "id": "hardde",
+  "emoji": "🇩🇪",
+  "name": "Kaiser",
+  "desc": "15 bonnes réponses d'affilée en Hardcore Allemagne",
+  "points": 25
+ },
+ {
+  "id": "hardit",
+  "emoji": "🇮🇹",
+  "name": "Capitano",
+  "desc": "15 bonnes réponses d'affilée en Hardcore Italie",
+  "points": 25
+ },
+ {
+  "id": "hardwc",
+  "emoji": "🏆",
+  "name": "Roi du Mondial",
+  "desc": "15 bonnes réponses d'affilée en Hardcore Coupe du monde",
+  "points": 25
+ },
+ {
+  "id": "hardcan",
+  "emoji": "⭐",
+  "name": "Étoile d'Afrique",
+  "desc": "15 bonnes réponses d'affilée en Hardcore CAN",
+  "points": 25
+ }
+]

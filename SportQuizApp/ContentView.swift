@@ -2,6 +2,7 @@ import SwiftUI
 import WebKit
 import GameKit
 import StoreKit
+import UserNotifications
 
 // Le quiz est embarqué dans l'app (Game/index.html + questions.js) ; le classement passe par
 // Game Center, un classement par mode. Ces classements doivent exister dans App Store Connect
@@ -10,9 +11,9 @@ let quizModes: Set<String> = ["foot", "multi", "hard", "hardfoot", "hardrugby", 
                                "hardfr", "hardes", "harduk", "hardde", "hardit", "hardwc", "hardcan",
                                "semaine"]   // défi de la semaine : classement Game Center récurrent, remis à zéro chaque lundi
 func leaderboardID(_ mode: String) -> String { "sportquiz.\(mode)" }
-// Badges → succès Game Center : désactivé pour la 1re version (les succès ne sont pas encore créés dans App Store Connect).
-// Le quiz renvoie tous ses badges à chaque connexion : ceux gagnés d'ici là seront reportés dès que ce sera activé.
-let reportsAchievements = false
+// Badges → succès Game Center « sportquiz.badge.<id> » (29 succès créés dans App Store Connect, AppStore/succes/).
+// Le quiz renvoie tous ses badges à chaque connexion : ceux gagnés avant l'activation sont reportés à ce moment-là.
+let reportsAchievements = true
 
 // Version affichée en bas du profil, ex. « 1.0 (3) » (version App Store et numéro de build)
 private let appVersion = "\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"))"
@@ -64,6 +65,9 @@ struct QuizWebView: UIViewRepresentable {
         config.setURLSchemeHandler(context.coordinator.scheme, forURLScheme: "sportquiz")
         config.userContentController.addUserScript(
             WKUserScript(source: "window.__quizGC = true; window.__appVersion = \"\(appVersion)\";", injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        // Progression gardée dans iCloud : la page la récupère au lancement (nouvel iPhone, app réinstallée)
+        config.userContentController.addUserScript(
+            WKUserScript(source: "window.__cloud = \(CloudSave.snapshotJSON());", injectionTime: .atDocumentStart, forMainFrameOnly: true))
         // Pas de zoom dans l'app (pincement ni double appui) : page à taille fixe, comme une app native
         config.userContentController.addUserScript(WKUserScript(source: """
             document.querySelector('meta[name=viewport]')?.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
@@ -103,11 +107,19 @@ struct QuizWebView: UIViewRepresentable {
         weak var webView: WKWebView?
         private var loaded = false
         private var shortcutObserver: NSObjectProtocol?
+        private var cloudObserver: NSObjectProtocol?
 
         override init() {
             super.init()
             shortcutObserver = NotificationCenter.default.addObserver(forName: Shortcuts.received, object: nil, queue: .main) { [weak self] _ in
                 self?.runPendingShortcut()
+            }
+            // Progression modifiée sur un autre appareil (ou arrivée d'iCloud après le lancement) : la page la fusionne
+            cloudObserver = NotificationCenter.default.addObserver(forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+                                                                   object: NSUbiquitousKeyValueStore.default, queue: .main) { [weak self] note in
+                let keys = note.userInfo?[NSUbiquitousKeyValueStoreChangedKeysKey] as? [String] ?? []
+                guard let self, self.loaded, !keys.isEmpty else { return }
+                self.webView?.evaluateJavaScript("window.__cloudMerge && __cloudMerge(\(CloudSave.snapshotJSON(keys)), true)")
             }
         }
 
@@ -162,6 +174,16 @@ struct QuizWebView: UIViewRepresentable {
                 present(gc, from: webView, orElse: {})
             case "review":   // demande d'avis App Store (iOS limite son affichage à 3 fois par an)
                 if let scene = webView?.window?.windowScene { SKStoreReviewController.requestReview(in: scene) }
+            case "cloud":    // progression à garder dans iCloud : { clé: valeur JSON }
+                CloudSave.save(body["all"] as? [String: String] ?? [:])
+            case "notifs":   // rappels programmés par la page (défi de la semaine, avant-matchs)
+                let list = body["list"] as? [[String: Any]] ?? []
+                Task { @MainActor [weak self] in
+                    let status = await Reminders.schedule(list, ask: body["ask"] as? Bool ?? false)
+                    self?.webView?.evaluateJavaScript("window.__notifStatus && __notifStatus('\(status)')", completionHandler: nil)
+                }
+            case "openSettings":   // notifications refusées : réglages iOS de l'app
+                if let url = URL(string: UIApplication.openNotificationSettingsURLString) { UIApplication.shared.open(url) }
             default:
                 print("[quiz] message inconnu", type)
             }
@@ -234,7 +256,7 @@ final class GameCenter {
         let todo = ids.map { "sportquiz.badge.\($0)" }.filter { !done.contains($0) }.map { id -> GKAchievement in
             let a = GKAchievement(identifier: id)
             a.percentComplete = 100
-            a.showsCompletionBanner = false   // le quiz affiche déjà son propre bandeau « Badge débloqué »
+            a.showsCompletionBanner = ids.count == 1   // bannière iOS pour un badge qui vient d'être gagné, pas au rattrapage à la connexion
             return a
         }
         if !todo.isEmpty { try await GKAchievement.report(todo) }
@@ -245,6 +267,55 @@ final class GameCenter {
         let (_, entries, _) = try await board.loadEntries(for: .global, timeScope: .allTime,
                                                           range: NSRange(location: 1, length: n))
         return entries.map { ["name": $0.player.displayName, "score": $0.score, "good": $0.context % 1000, "badges": $0.context / 1000] }
+    }
+}
+
+// Progression du quiz (badges, Aventure, derbies, défis…) copiée dans le stockage clé-valeur iCloud :
+// limité à 1 Mo, largement assez pour ces quelques clés. La fusion avec l'appareil est faite par la page (mergeCloud).
+enum CloudSave {
+    static let store = NSUbiquitousKeyValueStore.default
+
+    static func save(_ values: [String: String]) {
+        for (key, value) in values where key.hasPrefix("quiz-") && value.utf8.count < 500_000 { store.set(value, forKey: key) }
+        store.synchronize()
+    }
+
+    // Objet JS { clé: valeur JSON } des clés du quiz (toutes, ou seulement celles indiquées)
+    static func snapshotJSON(_ keys: [String]? = nil) -> String {
+        let all = store.dictionaryRepresentation.compactMapValues { $0 as? String }
+            .filter { $0.key.hasPrefix("quiz-") && (keys?.contains($0.key) ?? true) }
+        return (try? JSONSerialization.data(withJSONObject: all)).flatMap { String(data: $0, encoding: .utf8) } ?? "{}"
+    }
+}
+
+// Notifications locales : la page envoie la liste complète, on remplace tout ce qui était programmé.
+enum Reminders {
+    static func schedule(_ list: [[String: Any]], ask: Bool) async -> String {
+        let center = UNUserNotificationCenter.current()
+        var settings = await center.notificationSettings()
+        if ask && settings.authorizationStatus == .notDetermined {
+            _ = try? await center.requestAuthorization(options: [.alert, .sound])
+            settings = await center.notificationSettings()
+        }
+        switch settings.authorizationStatus {
+        case .authorized, .provisional, .ephemeral: break
+        case .denied: return "denied"
+        default: return "unknown"
+        }
+        center.removeAllPendingNotificationRequests()
+        for item in list {
+            guard let id = item["id"] as? String, let at = item["at"] as? Double, let title = item["title"] as? String else { continue }
+            let content = UNMutableNotificationContent()
+            content.title = title
+            content.body = item["body"] as? String ?? ""
+            content.sound = .default
+            content.userInfo = ["action": item["action"] as? String ?? ""]
+            let date = Date(timeIntervalSince1970: at / 1000)
+            let parts = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+            try? await center.add(UNNotificationRequest(identifier: id, content: content,
+                                                        trigger: UNCalendarNotificationTrigger(dateMatching: parts, repeats: false)))
+        }
+        return "on"
     }
 }
 

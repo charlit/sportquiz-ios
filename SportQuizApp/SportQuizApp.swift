@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import UserNotifications
 
 @main
 struct SportQuizApp: App {
@@ -24,7 +25,22 @@ enum Shortcuts {
     }
 }
 
-final class AppDelegate: NSObject, UIApplicationDelegate {
+final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions options: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        UNUserNotificationCenter.current().delegate = self
+        NSUbiquitousKeyValueStore.default.synchronize()   // va chercher la progression iCloud au plus tôt
+        return true
+    }
+
+    // Appui sur un rappel : ouvre le défi de la semaine ou les avant-matchs (même chemin que les raccourcis)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+        guard let action = response.notification.request.content.userInfo["action"] as? String, !action.isEmpty else { return }
+        await MainActor.run {
+            Shortcuts.pending = action
+            NotificationCenter.default.post(name: Shortcuts.received, object: nil)
+        }
+    }
+
     func application(_ application: UIApplication, configurationForConnecting session: UISceneSession,
                      options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         if let item = options.shortcutItem { Shortcuts.handle(item) }   // app lancée par un raccourci

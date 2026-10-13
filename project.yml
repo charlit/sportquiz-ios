@@ -61,6 +61,8 @@ targets:
       path: SportQuizApp/SportQuizApp.entitlements
       properties:
         com.apple.developer.game-center: true
+        # Sauvegarde de la progression (stockage clé-valeur iCloud)
+        com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.charlit.sportquiz
