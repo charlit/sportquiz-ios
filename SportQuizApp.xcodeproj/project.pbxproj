@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		032683D67AACE69484A1830B /* SportQuizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665652A7CB5BA98BC67284C9 /* SportQuizApp.swift */; };
 		3CE0228630E7B030B311F091 /* semaine.js in Resources */ = {isa = PBXBuildFile; fileRef = 42BB66FD703F903AEDD56830 /* semaine.js */; };
+		5CBA8644DB7A5BD74F69543F /* derbies.js in Resources */ = {isa = PBXBuildFile; fileRef = 2A8B596668664FCCBB1BD291 /* derbies.js */; };
 		721EA03DC522B10F326095A5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41E270EFAD1E2EB9C6DE012 /* ContentView.swift */; };
 		9A342E32948150685A163C23 /* clubs.js in Resources */ = {isa = PBXBuildFile; fileRef = 9F352E2126E8DB493880B319 /* clubs.js */; };
 		B6870C9719407B3B77CE5E83 /* matchs.js in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC8437AF677BDE65177189 /* matchs.js */; };
@@ -20,6 +21,7 @@
 /* Begin PBXFileReference section */
 		098B55E054F104441A1FB30A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		09D8DFE0C47EA6FA17E7B935 /* SportQuizApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SportQuizApp.entitlements; sourceTree = "<group>"; };
+		2A8B596668664FCCBB1BD291 /* derbies.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = derbies.js; sourceTree = "<group>"; };
 		2DCC8437AF677BDE65177189 /* matchs.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = matchs.js; sourceTree = "<group>"; };
 		42BB66FD703F903AEDD56830 /* semaine.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = semaine.js; sourceTree = "<group>"; };
 		665652A7CB5BA98BC67284C9 /* SportQuizApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportQuizApp.swift; sourceTree = "<group>"; };
@@ -49,6 +51,7 @@
 			isa = PBXGroup;
 			children = (
 				9F352E2126E8DB493880B319 /* clubs.js */,
+				2A8B596668664FCCBB1BD291 /* derbies.js */,
 				F5C16D29A6E2D28DA1BE24CD /* index.html */,
 				2DCC8437AF677BDE65177189 /* matchs.js */,
 				E893A64533338A59B2157C04 /* questions.js */,
@@ -136,6 +139,7 @@
 			files = (
 				CCA334C38A2D9B6303616542 /* Assets.xcassets in Resources */,
 				9A342E32948150685A163C23 /* clubs.js in Resources */,
+				5CBA8644DB7A5BD74F69543F /* derbies.js in Resources */,
 				EF3E7A264C02E648F52480D8 /* index.html in Resources */,
 				B6870C9719407B3B77CE5E83 /* matchs.js in Resources */,
 				E522C550A3C3C2C5E40C275D /* questions.js in Resources */,
@@ -163,7 +167,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "src=\"$SRCROOT/../sportquiz\"\ndst=\"$SRCROOT/SportQuizApp/Game\"\n[ -f \"$src/index.html\" ] && cp \"$src/index.html\" \"$dst/index.html\"\n# questions/<sport>.json sont la source (un fichier par sport) : on les réunit dans un script { sport: [...] }\n# (mis à jour ensuite en ligne par l'app)\nif [ -d \"$src/questions\" ]; then\n  { printf 'const QUESTIONS = {'; sep=''\n    for f in \"$src\"/questions/*.json; do printf '%s\"%s\":' \"$sep\" \"$(basename \"$f\" .json)\"; cat \"$f\"; sep=','; done\n    printf '};\\n'; } > \"$dst/questions.js\"\nfi\n[ -f \"$src/clubs.json\" ] && { printf 'const CLUBS = '; cat \"$src/clubs.json\"; printf ';\\n'; } > \"$dst/clubs.js\"\n[ -f \"$src/semaine.json\" ] && { printf 'const SEMAINE = '; cat \"$src/semaine.json\"; printf ';\\n'; } > \"$dst/semaine.js\"\n[ -f \"$src/matchs.json\" ] && { printf 'const MATCHS = '; cat \"$src/matchs.json\"; printf ';\\n'; } > \"$dst/matchs.js\"\ntrue\n";
+			shellScript = "src=\"$SRCROOT/../sportquiz\"\ndst=\"$SRCROOT/SportQuizApp/Game\"\n[ -f \"$src/index.html\" ] && cp \"$src/index.html\" \"$dst/index.html\"\n# questions/<sport>.json sont la source (un fichier par sport) : on les réunit dans un script { sport: [...] }\n# (mis à jour ensuite en ligne par l'app)\nif [ -d \"$src/questions\" ]; then\n  { printf 'const QUESTIONS = {'; sep=''\n    for f in \"$src\"/questions/*.json; do printf '%s\"%s\":' \"$sep\" \"$(basename \"$f\" .json)\"; cat \"$f\"; sep=','; done\n    printf '};\\n'; } > \"$dst/questions.js\"\nfi\n[ -f \"$src/clubs.json\" ] && { printf 'const CLUBS = '; cat \"$src/clubs.json\"; printf ';\\n'; } > \"$dst/clubs.js\"\n[ -f \"$src/semaine.json\" ] && { printf 'const SEMAINE = '; cat \"$src/semaine.json\"; printf ';\\n'; } > \"$dst/semaine.js\"\n[ -f \"$src/matchs.json\" ] && { printf 'const MATCHS = '; cat \"$src/matchs.json\"; printf ';\\n'; } > \"$dst/matchs.js\"\n[ -f \"$src/derbies.json\" ] && { printf 'const DERBIES = '; cat \"$src/derbies.json\"; printf ';\\n'; } > \"$dst/derbies.js\"\ntrue\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
