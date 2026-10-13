@@ -328,7 +328,8 @@ final class QuizSchemeHandler: NSObject, WKURLSchemeHandler {
                                 "clubs.js": "text/javascript; charset=utf-8",
                                 "semaine.js": "text/javascript; charset=utf-8",
                                 "matchs.js": "text/javascript; charset=utf-8",
-                                "derbies.js": "text/javascript; charset=utf-8"]
+                                "derbies.js": "text/javascript; charset=utf-8",
+                                "supporters.js": "text/javascript; charset=utf-8"]
     private var active = Set<ObjectIdentifier>()   // tâches non annulées (accès sur le main thread)
 
     func webView(_ webView: WKWebView, start task: WKURLSchemeTask) {
