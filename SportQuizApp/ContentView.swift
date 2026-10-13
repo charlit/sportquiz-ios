@@ -90,6 +90,7 @@ struct QuizWebView: UIViewRepresentable {
         webView.scrollView.minimumZoomScale = 1
         webView.scrollView.maximumZoomScale = 1
         webView.scrollView.pinchGestureRecognizer?.isEnabled = false
+        webView.scrollView.bounces = false   // pas d'effet élastique : l'accueil, qui tient sur l'écran, ne bouge plus
         webView.scrollView.delegate = context.coordinator
         webView.load(URLRequest(url: url))
         GameCenter.shared.authenticate { [weak webView] name in
