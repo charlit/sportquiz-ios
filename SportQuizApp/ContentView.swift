@@ -157,6 +157,15 @@ struct QuizWebView: UIViewRepresentable {
                 case "success": UINotificationFeedbackGenerator().notificationOccurred(.success)
                 case "warning": UINotificationFeedbackGenerator().notificationOccurred(.warning)
                 case "error": UINotificationFeedbackGenerator().notificationOccurred(.error)
+                case "tick": UIImpactFeedbackGenerator(style: .rigid).impactOccurred(intensity: 0.6)   // 3 dernières secondes du chrono
+                case "badge":   // badge débloqué : plus marqué qu'une bonne réponse
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
+                case "celebrate":   // sans-faute ou record : le plus fort, le plus rare
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    for (i, delay) in [0.15, 0.3, 0.45].enumerated() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { UIImpactFeedbackGenerator(style: .heavy).impactOccurred(intensity: 1 - Double(i) * 0.25) }
+                    }
                 default: UIImpactFeedbackGenerator(style: .light).impactOccurred()
                 }
             case "share":    // feuille de partage iOS (Messages, WhatsApp, Instagram…)
@@ -199,9 +208,11 @@ struct QuizWebView: UIViewRepresentable {
 
         func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String,
                      initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
-            let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+            // La page peut nommer le bouton d'action après un séparateur invisible (U+001F) : « C'est parti », « Débloquer »…
+            let parts = message.components(separatedBy: "\u{1F}")
+            let alert = UIAlertController(title: nil, message: parts[0], preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Annuler", style: .cancel) { _ in completionHandler(false) })
-            alert.addAction(UIAlertAction(title: "OK", style: .destructive) { _ in completionHandler(true) })
+            alert.addAction(UIAlertAction(title: parts.count > 1 ? parts[1] : "OK", style: .default) { _ in completionHandler(true) })
             present(alert, from: webView, orElse: { completionHandler(false) })
         }
 
