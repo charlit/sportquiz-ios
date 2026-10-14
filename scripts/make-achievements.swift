@@ -1,5 +1,6 @@
-// Images des succès Game Center (512×512, opaques) : l'emoji du badge sur un médaillon doré.
-// swift scripts/make-achievements.swift AppStore/succes   (lit succes.json, écrit <id>.png)
+// Images des succès Game Center (512×512, opaques) : le dessin Twemoji du badge (twemoji/<id>.svg, licence CC-BY 4.0)
+// sur un médaillon doré. Pas d'emoji Apple : Apple interdit de les reprendre en image (règles 4.5.6 et 5.2.5).
+// swift scripts/make-achievements.swift AppStore/succes   (lit succes.json et twemoji/, écrit <id>.png)
 import AppKit
 
 let dir = URL(fileURLWithPath: CommandLine.arguments[1])
@@ -19,9 +20,9 @@ for item in list {
     NSGradient(colors: [NSColor(red: 1, green: 0.84, blue: 0.35, alpha: 1), NSColor(red: 0.85, green: 0.55, blue: 0.10, alpha: 1)])!.draw(in: ring, angle: -90)
     let disc = NSBezierPath(ovalIn: NSRect(x: 58, y: 58, width: s - 116, height: s - 116))
     NSGradient(colors: [NSColor(red: 0.16, green: 0.24, blue: 0.40, alpha: 1), NSColor(red: 0.07, green: 0.11, blue: 0.20, alpha: 1)])!.draw(in: disc, angle: -90)
-    let text = NSAttributedString(string: emoji, attributes: [.font: NSFont.systemFont(ofSize: 210)])
-    let b = text.size()
-    text.draw(at: NSPoint(x: (s - b.width) / 2, y: (s - b.height) / 2 + 6))
+    guard let art = NSImage(contentsOf: dir.appendingPathComponent("twemoji/\(id).svg")) else { fatalError("twemoji/\(id).svg manquant (\(emoji))") }
+    let side: CGFloat = 230
+    art.draw(in: NSRect(x: (s - side) / 2, y: (s - side) / 2, width: side, height: side))
     NSGraphicsContext.restoreGraphicsState()
     let rep = NSBitmapImageRep(cgImage: cg.makeImage()!)
     try! rep.representation(using: .png, properties: [:])!.write(to: dir.appendingPathComponent("\(id).png"))
