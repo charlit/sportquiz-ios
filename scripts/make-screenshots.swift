@@ -13,7 +13,7 @@ let badges = js(states["badges"]!)
 // nom, localStorage avant chargement, action après chargement
 let shots: [(String, [String: String], String)] = [
     ("1-accueil", ["quiz-badges": badges], ""),
-    ("2-question", ["quiz-badges": badges], "start('foot'); idx = 41; score = 8340; good = 39; lives = 2; $('score').textContent = score; ask();"),
+    ("2-question", ["quiz-badges": badges], "start('foot'); idx = deck.findIndex((e, i) => i >= 41 && CLUBS[e[0]] && !LANDS[landOf(e[0])].ed); score = 8340; good = 39; lives = 2; $('score').textContent = score; ask();"),
     ("3-aventure-carte", ["quiz-adv": js(states["partial"]!), "quiz-badges": badges], "advLand = 'fr'; cityFilter = null; openClubs();"),
     ("4-aventure-pays", ["quiz-adv": js(states["frdone"]!), "quiz-adv-open": js(["fr", "es"]), "quiz-badges": badges], "openLands();"),
     ("5-classement", ["quiz-badges": badges], "__quizPlayer('Toi'); window.fetch = async () => ({ ok: true, json: async () => \(rows) }); show('ranks'); openBoard('foot');"),
@@ -30,6 +30,8 @@ final class Shooter: NSObject, WKNavigationDelegate {
         config.websiteDataStore = .nonPersistent()
         let pre = "localStorage.clear();" + storage.map { "localStorage.setItem(\(js([$0.key]).dropFirst().dropLast()), \(js([$0.value]).dropFirst().dropLast()));" }.joined()
         config.userContentController.addUserScript(WKUserScript(source: "window.__quizGC = true;" + pre, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        // hors écran, WebKit fige les animations CSS à leur première image (contenu invisible)
+        config.userContentController.addUserScript(WKUserScript(source: "document.head.insertAdjacentHTML('beforeend', '<style>*{animation:none!important}</style>')", injectionTime: .atDocumentEnd, forMainFrameOnly: true))
         web = WKWebView(frame: NSRect(x: 0, y: 0, width: 440, height: 956), configuration: config)
         web.navigationDelegate = self
         window.contentView = web           // WebKit ne dessine que dans une fenêtre

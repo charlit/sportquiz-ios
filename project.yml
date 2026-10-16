@@ -24,7 +24,8 @@ targets:
               for f in "$src"/questions/*.json; do printf '%s"%s":' "$sep" "$(basename "$f" .json)"; cat "$f"; sep=','; done
               printf '};\n'; } > "$dst/questions.js"
           fi
-          [ -f "$src/clubs.json" ] && { printf 'const CLUBS = '; cat "$src/clubs.json"; printf ';\n'; } > "$dst/clubs.js"
+          # sans les Coupes du monde ni les CAN (App Review 5.2.1)
+          [ -f "$src/clubs.json" ] && { printf 'const CLUBS = '; /usr/bin/python3 -c 'import json,sys; c=json.load(open(sys.argv[1])); print(json.dumps({k: v for k, v in c.items() if v.get("pays") not in ("wc", "can")}, ensure_ascii=False))' "$src/clubs.json"; printf ';\n'; } > "$dst/clubs.js"
           [ -f "$src/semaine.json" ] && { printf 'const SEMAINE = '; cat "$src/semaine.json"; printf ';\n'; } > "$dst/semaine.js"
           [ -f "$src/matchs.json" ] && { printf 'const MATCHS = '; cat "$src/matchs.json"; printf ';\n'; } > "$dst/matchs.js"
           [ -f "$src/derbies.json" ] && { printf 'const DERBIES = '; cat "$src/derbies.json"; printf ';\n'; } > "$dst/derbies.js"
@@ -69,7 +70,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.charlit.sportquiz
         # Version affichée sur l'App Store, et numéro de build à augmenter à chaque envoi à App Store Connect
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "3"
+        CURRENT_PROJECT_VERSION: "5"
         DEVELOPMENT_TEAM: 32AK299L44
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon

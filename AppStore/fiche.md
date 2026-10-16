@@ -6,29 +6,29 @@ Football Quiz – Culture Foot
 (« Football Quiz » seul était déjà pris. Sous l'icône, l'app reste « Football Quiz ».)
 
 ## Sous-titre (30 max)
-Clubs, Coupe du monde et CAN
+Clubs, derbies et légendes
 
 ## Texte promotionnel (170 max, modifiable sans nouvelle version)
 Plus de 4 000 questions sur le foot, des clubs aux Coupes du monde. Débloque les pays de l'Aventure un par un et grimpe au classement Game Center !
 
 ## Mots-clés (100 max, séparés par des virgules, sans espace)
-trivia,questions,afrique,ballon,joueurs,sport,jeu,mondial,ligue,europe,défi,histoire,buteur,match
+trivia,questions,derby,ballon,joueurs,sport,jeu,légende,ligue,europe,défi,histoire,buteur,match
 
-(Les mots du nom et du sous-titre – football, quiz, culture, foot, clubs, coupe du monde, CAN – sont déjà pris en compte par la recherche : inutile de les répéter.)
+(Les mots du nom et du sous-titre – football, quiz, culture, foot, clubs, derbies, légendes – sont déjà pris en compte par la recherche : inutile de les répéter.)
 
 ## Description (4 000 max)
 Tu penses tout savoir sur le foot ? Prouve-le !
 
-Football Quiz réunit plus de 4 000 questions sur le football : l'histoire des grands clubs, les Coupes du monde, la Coupe d'Afrique des nations et toute la culture foot, des années 1990 à aujourd'hui.
+Football Quiz réunit plus de 4 000 questions sur le football : l'histoire des grands clubs, les derbies, les légendes et toute la culture foot, des années 1990 à aujourd'hui.
 
 SPÉCIAL FOOT
 100 questions, 3 vies, 5 niveaux de difficulté. Réponds vite pour marquer plus de points.
 
 HARDCORE
-Une seule vie, uniquement des questions Expert et Légende, et ça ne s'arrête jamais. Joue sur tout le foot ou choisis un pays : France, Espagne, Royaume-Uni, Allemagne, Italie, Coupe du monde ou CAN. Chaque mode a son propre classement.
+Une seule vie, uniquement des questions Expert et Légende, et ça ne s'arrête jamais. Joue sur tout le foot ou choisis un pays : France, Espagne, Royaume-Uni, Allemagne ou Italie. Chaque mode a son propre classement.
 
 AVENTURE
-Pars de la France et parcours l'histoire de 18 clubs, de 2024 jusqu'aux années 1990, en 10 étapes chacun. Termine tous les clubs d'un pays pour débloquer le suivant : Espagne, Royaume-Uni, Allemagne, Italie, les Coupes du monde de 1978 à 2022 et les CAN de 2000 à 2025.
+Pars de la France et parcours l'histoire de 18 clubs, de 2024 jusqu'aux années 1990, en 10 étapes chacun. Termine tous les clubs d'un pays pour débloquer le suivant : Espagne, Royaume-Uni, Allemagne et Italie.
 
 BADGES ET CLASSEMENTS
 Gagne des badges en jouant, puis compare ton score et tes badges avec les autres joueurs grâce aux classements Game Center.
