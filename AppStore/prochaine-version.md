@@ -8,7 +8,7 @@ Règle 2.3.1(a) : chaque fonction doit être décrite précisément dans les not
 
 ```
 1. What the app is
-Football Quiz is a French-language football trivia game for French-speaking fans of all ages: more than 4,000 multiple-choice questions on club history, the World Cup and the Africa Cup of Nations, with increasing difficulty, a timer and points. No account, no login, no user-generated content, no in-app purchases, no ads, no data collected.
+Football Quiz is a French-language football trivia game for French-speaking fans of all ages: more than 4,000 multiple-choice questions on club history and football culture, with increasing difficulty, a timer and points. No account, no login, no user-generated content, no in-app purchases, no ads, no data collected.
 
 2. Every feature and how to reach it (all from the home screen, no setup)
 - "Spécial Foot": 100 questions, 3 lives, Game Center leaderboard.
@@ -21,7 +21,7 @@ Football Quiz is a French-language football trivia game for French-speaking fans
 - Profile (top-right button): badges, choice of name frame, settings (vibrations, reminders), contact button, privacy policy link, app version.
 
 3. Native iOS features
-Game Center leaderboards and 29 achievements (one per badge; the iOS achievement banner appears when a badge is earned); haptic feedback (can be turned off in Profile › Réglages); share sheet for scores; home-screen quick actions (long-press the app icon); App Store rating prompt via SKStoreReviewController; full offline play with bundled content.
+Game Center leaderboards and 23 achievements (one per badge; the iOS achievement banner appears when a badge is earned); haptic feedback (can be turned off in Profile › Réglages); share sheet for scores; home-screen quick actions (long-press the app icon); App Store rating prompt via SKStoreReviewController; full offline play with bundled content.
 - iCloud: progress (badges, Aventure, played challenges, settings) is copied to the player's own iCloud key-value storage so it comes back after a reinstall or on a new iPhone. The developer never receives it.
 - Local notifications: after the first finished game the app asks permission through the standard iOS prompt. If accepted, it schedules local reminders on the device only (new weekly challenge on Monday, last-day reminder on Sunday if not played, pre-match quizzes the day before). They can be turned off in Profile › Réglages › Rappels. No server, nothing sent.
 
@@ -42,16 +42,16 @@ All questions are original factual trivia written by the developer. Clubs, playe
 ```
 Tu penses tout savoir sur le foot ? Prouve-le !
 
-Football Quiz réunit plus de 4 000 questions sur le football : l'histoire des grands clubs, les Coupes du monde, la Coupe d'Afrique des nations et toute la culture foot, des années 1990 à aujourd'hui.
+Football Quiz réunit plus de 4 000 questions sur le football : l'histoire des grands clubs, les derbies, les légendes et toute la culture foot, des années 1990 à aujourd'hui.
 
 SPÉCIAL FOOT
 100 questions, 3 vies, 5 niveaux de difficulté. Réponds vite pour marquer plus de points.
 
 HARDCORE
-Une seule vie, uniquement des questions Expert et Légende, et ça ne s'arrête jamais. Joue sur tout le foot ou choisis un pays : France, Espagne, Royaume-Uni, Allemagne, Italie, Coupe du monde ou CAN. Chaque mode a son propre classement.
+Une seule vie, uniquement des questions Expert et Légende, et ça ne s'arrête jamais. Joue sur tout le foot ou choisis un pays : France, Espagne, Royaume-Uni, Allemagne ou Italie. Chaque mode a son propre classement.
 
 AVENTURE
-Pars de la France et parcours l'histoire de 18 clubs, de 2024 jusqu'aux années 1990, en 10 étapes chacun. Termine tous les clubs d'un pays pour débloquer le suivant : Espagne, Royaume-Uni, Allemagne, Italie, les Coupes du monde de 1978 à 2022 et les CAN de 2000 à 2025.
+Pars de la France et parcours l'histoire de 18 clubs, de 2024 jusqu'aux années 1990, en 10 étapes chacun. Termine tous les clubs d'un pays pour débloquer le suivant : Espagne, Royaume-Uni, Allemagne et Italie.
 
 DÉFI DE LA SEMAINE
 Chaque lundi, 10 questions sur une légende du foot : joueurs, entraîneurs, gardiens, arbitres. Un seul essai, les mêmes questions pour tout le monde, et un classement remis à zéro chaque semaine.
