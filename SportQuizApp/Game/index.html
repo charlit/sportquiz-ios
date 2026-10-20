@@ -324,7 +324,7 @@
     #home .sub { display:none; }
     #home .logo { margin-bottom:12px; }
     .tile { min-height:100px; padding:12px; } .tile b { font-size:1.8rem; } .tile strong { margin-top:8px; }
-    .tile .tag { top:12px; right:46px; }   /* étiquette à côté du bouton ⓘ, pas sur le titre */
+    .tile .tag { top:14px; right:44px; font-size:.65rem; padding:2px 6px; }   /* à côté du bouton ⓘ, plus petite pour ne pas toucher l'emoji sur un écran étroit */
   }
 </style>
 </head>
@@ -390,7 +390,7 @@
       </div>
     </div>
     <div class="plinks"><a class="rankbtn" id="contact">✉️ Signaler un bug ou une idée</a>
-      <a class="rankbtn" href="https://charlit.github.io/sportquiz/confidentialite.html" target="_blank" rel="noopener">🔒 Confidentialité</a></div>
+      <a class="rankbtn" id="privacy" href="https://charlit.github.io/sportquiz/confidentialite.html" target="_blank" rel="noopener">🔒 Confidentialité</a></div>
     <p class="version" id="appVersion"></p>
   </section>
 
@@ -578,6 +578,8 @@ let mode, deck, idx, score, good, lives, timer, next, t0, saved, advClub, stage,
 
 // Dans l'app iOS, le classement passe par Game Center : pas de pseudo, le score part tout seul.
 const GC = !!window.__quizGC;
+// App Android (1re version) : pas encore de classement (Google Play Jeux à venir), le bouton est masqué.
+const NOBOARD = !!window.__quizNoBoard, OS = window.__quizOS || 'iOS';
 // Fonctions natives de l'app iOS (vibrations, partage, Game Center, avis) ; sans effet sur le site web.
 const nativeApp = (type, data = {}) => {
   if (type === 'haptic' && !load('quiz-haptics', true)) return;   // vibrations coupées dans les réglages du profil
@@ -716,7 +718,9 @@ function buildDeck(m) {
     return shuffle(fresh).concat(shuffle(pool.filter(x => !fresh.includes(x))));
   }
   if (m === 'adv') {
-    pick(CLUBS[advClub].q.filter(q => q[0] === stage), PER_STAGE)
+    const here = CLUBS[advClub].q.filter(q => q[0] === stage);   // app : moins de 5 si des questions Coupe du monde ont été retirées
+    const near = shuffle(CLUBS[advClub].q.filter(q => Math.abs(q[0] - stage) === 1)).slice(0, Math.max(0, PER_STAGE - here.length));
+    pick(here.concat(near), PER_STAGE)
       .forEach(q => out.push(clubQ(advClub, q, stageLevel(stage))));
   } else {
     // Spécial Foot : chaque niveau mêle à parts égales foot général, clubs et compétitions internationales (Mondial + CAN)
@@ -910,7 +914,8 @@ function finish() {
   }
   if (GC) {
     show('end');
-    if (gcName) { $('saveMsg').textContent = 'Envoi du score…'; sendScore(gcName); }
+    if (NOBOARD) { $('saveMsg').textContent = ''; $('endBoard').innerHTML = ''; }
+    else if (gcName) { $('saveMsg').textContent = 'Envoi du score…'; sendScore(gcName); }
     else { $('saveMsg').textContent = 'Connecte-toi à Game Center pour entrer au classement'; $('endBoard').innerHTML = ''; }
     return;
   }
@@ -1058,6 +1063,19 @@ const LANDS = {
 // App : ni Coupes du monde ni CAN (App Review 5.2.1, propriété intellectuelle FIFA / CAF). Leurs entrées de clubs.json sont retirées
 // au build (project.yml) et ignorées par validClubs à la mise à jour en ligne.
 if (GC) { delete LANDS.wc; delete LANDS.can; }
+// Dans les apps, aucune question ne cite la Coupe du monde, la FIFA ou la CAN, même en mauvaise réponse (App Review 5.2.1, build 6).
+// Le site garde tout. Défis de la semaine : version `app` (10 questions) et `introApp` préparées dans semaine.json.
+const FIFA_RX = /coupe du monde|mondia(l|ux)|champion(ne)?s? du monde|conf[ée]d[ée]rations|fifa|coupe d.afrique/i;
+const sansFifa = qs => qs.filter(q => !q.some(x => typeof x === 'string' && (FIFA_RX.test(x) || /\bCAN\b/.test(x))));
+function cleanApp() {
+  if (!GC) return;
+  QUESTIONS.foot = sansFifa(QUESTIONS.foot);
+  for (const c of Object.values(CLUBS)) c.q = sansFifa(c.q);
+  for (const d of DERBIES) d.q = sansFifa(d.q);
+  if (typeof SUPPORTERS !== 'undefined') for (const x of SUPPORTERS) x.q = sansFifa(x.q);
+  for (const w of SEMAINE) { w.q = sansFifa(w.app || w.q); if (w.introApp) w.intro = w.introApp; }
+}
+cleanApp();
 const landOf = id => CLUBS[id].pays || 'fr';
 const stagesOf = id => LANDS[landOf(id)].stages || STAGES;
 const eraOf = (id, k) => (LANDS[landOf(id)].eras || ERAS)[k];
@@ -1395,7 +1413,7 @@ function refreshProfile() {
   $('frameList').querySelectorAll('.frame:not(:disabled)').forEach(b => b.onclick = () => { store('quiz-tier', b.dataset.frame); refreshProfile(); });
   $('profAvatar').dataset.tier = $('whoAvatar').dataset.tier = tier ? tier[1] : '';
   $('whoCount').textContent = `${n} badge${n > 1 ? 's' : ''} sur ${SHOWN.length}` + (tier ? ` · encart ${tier[2]}` : '') +
-    (next ? ` · encore ${next[0] - n} pour l’encart ${next[2]}` : '') + (!name && GC ? ' · connecte-toi à Game Center' : '');
+    (next ? ` · encore ${next[0] - n} pour l’encart ${next[2]}` : '') + (!name && GC && !NOBOARD ? ' · connecte-toi à Game Center' : '');
   $('badgesCount').textContent = `· ${n} / ${SHOWN.length}`;
   $('badgesInfo').textContent = `${n} badge${n > 1 ? 's' : ''} gagné${n > 1 ? 's' : ''} sur ${SHOWN.length}` + (next ? ` · encore ${next[0] - n} pour l’encart ${next[2]}` : '');
   $('trophies').innerHTML = SHOWN.map(([id, icon, title, how]) => {
@@ -1409,7 +1427,7 @@ $('goBadges').onclick = () => { refreshProfile(); show('badges'); };
 // Contact : ouvre l'app mail avec l'objet et l'appareil pré-remplis
 const CONTACT = 'sportquiz64@gmail.com';
 $('contact').href = `mailto:${CONTACT}?subject=${encodeURIComponent('Football Quiz : bug / suggestion')}&body=${encodeURIComponent(
-  `Bonjour,\n\n(Décris le bug ou ton idée ici)\n\n---\nAppareil : ${navigator.userAgent}\nVersion : ${GC ? 'app iOS ' + (window.__appVersion || '') : 'site web'}`)}`;
+  `Bonjour,\n\n(Décris le bug ou ton idée ici)\n\n---\nAppareil : ${navigator.userAgent}\nVersion : ${GC ? `app ${OS} ` + (window.__appVersion || '') : 'site web'}`)}`;
 // Bas du profil : version de l'app (fournie par l'app iOS), ou « version web »
 $('appVersion').textContent = GC ? `Football Quiz · version ${window.__appVersion || '?'}` : 'Football Quiz · version web';
 
@@ -1509,6 +1527,8 @@ async function sendScore(name) {
 /* ---------- Navigation ---------- */
 const goHome = () => show('home');
 // Classement : ouvre sur l'onglet du dernier mode joué (Foot par défaut)
+$('goRanks').classList.toggle('hidden', NOBOARD);
+if (OS === 'Android') $('privacy').href = 'https://charlit.github.io/sportquiz/confidentialite-android.html';
 $('goRanks').onclick = () => { show('ranks'); openBoard(BOARDS.includes(mode) ? mode : 'foot'); };
 document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => start(b.dataset.mode));
 $('goHard').onclick = openPick; // Hardcore : foot ou pays (les questions des autres sports restent dans questions/<sport>.json)
@@ -1589,7 +1609,7 @@ function planNotifs(ask = false) {
   nativeApp('notifs', { ask, list: list.sort((a, b) => a.at - b.at).slice(0, 60) });
 }
 window.__notifStatus = st => {   // réponse de l'app : 'on', 'denied' (refusées dans les Réglages iOS) ou 'unknown'
-  $('notifsHint').textContent = st === 'denied' && load('quiz-notifs', true) ? 'Bloquées par iOS : touche ici pour les autoriser' : 'Nouveau défi le lundi, avant-matchs la veille';
+  $('notifsHint').textContent = st === 'denied' && load('quiz-notifs', true) ? `Bloquées par ${OS} : touche ici pour les autoriser` : 'Nouveau défi le lundi, avant-matchs la veille';
   $('notifsHint').onclick = st === 'denied' ? e => { e.preventDefault(); nativeApp('openSettings'); } : null;
 };
 planNotifs();
@@ -1641,11 +1661,11 @@ function validQuestions(q) {
 }
 if (GC) {
   const cached = validQuestions(load('quiz-questions', null)); // pas si l'app vient d'être mise à jour avec plus de questions
-  if (cached && countQ(cached) >= countQ(QUESTIONS)) Object.assign(QUESTIONS, cached);
+  if (cached && countQ(cached) >= countQ(QUESTIONS)) { Object.assign(QUESTIONS, cached); cleanApp(); }
   // Tous les sports de cette version, ou rien : un fichier manquant (hors ligne, 404) annule la mise à jour.
   Promise.all(Object.keys(SPORTS).map(s => fetch(QUESTIONS_URL(s), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(qs => [s, qs])))
     .then(all => Object.fromEntries(all.filter(([, qs]) => qs)))
-    .then(q => { const ok = validQuestions(q); if (ok) { Object.assign(QUESTIONS, ok); store('quiz-questions', ok); } })
+    .then(q => { const ok = validQuestions(q); if (ok) { Object.assign(QUESTIONS, ok); store('quiz-questions', ok); cleanApp(); } })
     .catch(() => {});
 }
 // Clubs, Coupes du monde et CAN (Aventure, Hardcore par pays, Spécial Foot) : même principe avec clubs.json.
@@ -1668,24 +1688,25 @@ function validClubs(c) {
 }
 if (GC) {
   const cached = validClubs(load('quiz-clubs', null));
-  if (cached && countC(cached) >= countC(CLUBS)) Object.assign(CLUBS, cached);
+  if (cached && countC(cached) >= countC(CLUBS)) { Object.assign(CLUBS, cached); cleanApp(); }
   fetch(CLUBS_URL, { cache: 'no-store' }).then(r => r.ok ? r.json() : null)
-    .then(c => { const ok = validClubs(c); if (ok) { Object.assign(CLUBS, ok); store('quiz-clubs', ok); } })
+    .then(c => { const ok = validClubs(c); if (ok) { Object.assign(CLUBS, ok); store('quiz-clubs', ok); cleanApp(); } })
     .catch(() => {});
 }
 // Défis de la semaine : même principe avec semaine.json (les nouvelles semaines arrivent sans mise à jour de l'app).
 const SEMAINE_URL = 'https://raw.githubusercontent.com/charlit/sportquiz/main/semaine.json';
 function validWeeks(a) {
   const str = v => typeof v === 'string' && v;
-  return Array.isArray(a) && a.length && a.every(w => w && /^\d{4}-\d{2}-\d{2}$/.test(w.debut) && str(w.titre) && Array.isArray(w.q) && w.q.length === 10 &&
-    w.q.every(q => Array.isArray(q) && q.length === 6 && Number.isInteger(q[0]) && q[0] >= 1 && q[0] <= 5 && q.slice(1).every(str))) ? a : null;
+  const ten = qs => Array.isArray(qs) && qs.length === 10 &&
+    qs.every(q => Array.isArray(q) && q.length === 6 && Number.isInteger(q[0]) && q[0] >= 1 && q[0] <= 5 && q.slice(1).every(str));
+  return Array.isArray(a) && a.length && a.every(w => w && /^\d{4}-\d{2}-\d{2}$/.test(w.debut) && str(w.titre) && ten(w.q) && (!w.app || ten(w.app))) ? a : null;
 }
 if (GC) {
-  const useWeeks = a => { SEMAINE.splice(0, SEMAINE.length, ...a); renderWeek(); };
+  const useWeeks = a => { SEMAINE.splice(0, SEMAINE.length, ...a); cleanApp(); renderWeek(); };
   const cached = validWeeks(load('quiz-semaine-data', null));
   if (cached && cached.length >= SEMAINE.length) useWeeks(cached);
   fetch(SEMAINE_URL, { cache: 'no-store' }).then(r => r.ok ? r.json() : null)
-    .then(a => { const ok = validWeeks(a); if (ok) { useWeeks(ok); store('quiz-semaine-data', ok); } })
+    .then(a => { const ok = validWeeks(a); if (ok) { store('quiz-semaine-data', ok); useWeeks(ok); } })
     .catch(() => {});
 }
 // Avant-matchs : le calendrier change tous les jours, l'app prend toujours la dernière version publiée par le robot.
