@@ -9,7 +9,7 @@ Football Quiz – Culture Foot
 Clubs, derbies et légendes
 
 ## Texte promotionnel (170 max, modifiable sans nouvelle version)
-Plus de 4 000 questions sur le foot, des clubs aux Coupes du monde. Débloque les pays de l'Aventure un par un et grimpe au classement Game Center !
+Plus de 4 000 questions sur le foot, des grands clubs aux derbies. Débloque les pays de l'Aventure un par un et grimpe au classement Game Center !
 
 ## Mots-clés (100 max, séparés par des virgules, sans espace)
 trivia,questions,derby,ballon,joueurs,sport,jeu,légende,ligue,europe,défi,histoire,buteur,match
