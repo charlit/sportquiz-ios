@@ -171,7 +171,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "src=\"$SRCROOT/../sportquiz\"\ndst=\"$SRCROOT/SportQuizApp/Game\"\n[ -f \"$src/index.html\" ] && cp \"$src/index.html\" \"$dst/index.html\"\n# questions/<sport>.json sont la source (un fichier par sport) : on les réunit dans un script { sport: [...] }\n# (mis à jour ensuite en ligne par l'app)\nif [ -d \"$src/questions\" ]; then\n  { printf 'const QUESTIONS = {'; sep=''\n    for f in \"$src\"/questions/*.json; do printf '%s\"%s\":' \"$sep\" \"$(basename \"$f\" .json)\"; cat \"$f\"; sep=','; done\n    printf '};\\n'; } > \"$dst/questions.js\"\nfi\n# sans les Coupes du monde ni les CAN (App Review 5.2.1)\n[ -f \"$src/clubs.json\" ] && { printf 'const CLUBS = '; /usr/bin/python3 -c 'import json,sys; c=json.load(open(sys.argv[1])); print(json.dumps({k: v for k, v in c.items() if v.get(\"pays\") not in (\"wc\", \"can\")}, ensure_ascii=False))' \"$src/clubs.json\"; printf ';\\n'; } > \"$dst/clubs.js\"\n[ -f \"$src/semaine.json\" ] && { printf 'const SEMAINE = '; cat \"$src/semaine.json\"; printf ';\\n'; } > \"$dst/semaine.js\"\n[ -f \"$src/matchs.json\" ] && { printf 'const MATCHS = '; cat \"$src/matchs.json\"; printf ';\\n'; } > \"$dst/matchs.js\"\n[ -f \"$src/derbies.json\" ] && { printf 'const DERBIES = '; cat \"$src/derbies.json\"; printf ';\\n'; } > \"$dst/derbies.js\"\n[ -f \"$src/supporters.json\" ] && { printf 'const SUPPORTERS = '; cat \"$src/supporters.json\"; printf ';\\n'; } > \"$dst/supporters.js\"\ntrue\n";
+			shellScript = "src=\"$SRCROOT/../sportquiz\"\ndst=\"$SRCROOT/SportQuizApp/Game\"\n[ -f \"$src/index.html\" ] && cp \"$src/index.html\" \"$dst/index.html\"\n# données sans Coupe du monde, FIFA, CAN ni sélections nationales (App Review 5.2.1) ; le site garde tout\nif [ -f \"$src/clubs.json\" ]; then /usr/bin/python3 \"$SRCROOT/scripts/app-data.py\" \"$src\" \"$dst\" || exit 1; fi\ntrue\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -258,7 +258,7 @@
 				CODE_SIGN_ENTITLEMENTS = SportQuizApp/SportQuizApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 32AK299L44;
 				INFOPLIST_FILE = SportQuizApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -336,7 +336,7 @@
 				CODE_SIGN_ENTITLEMENTS = SportQuizApp/SportQuizApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 32AK299L44;
 				INFOPLIST_FILE = SportQuizApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
