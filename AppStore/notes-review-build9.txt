@@ -1,0 +1,31 @@
+0. Guideline 5.2.1 (build 9)
+Build 9 is a club football quiz only. Besides everything removed in builds 5 and 6 (anything naming the World Cup, Confederations Cup, Club World Cup, Africa Cup of Nations or FIFA), it also removes every question about national teams and international tournaments, including World Cup matches that were described without naming the competition. What remains is about clubs, club competitions, stadiums, supporters and club careers. It is gone from the app's files; downloads are filtered too. No federation or competition branding. Build 9: new question screen design.
+
+1. What the app is
+A French-language club football trivia game: more than 4,000 multiple-choice questions with increasing difficulty, a timer and points. No account, no login, no user-generated content, no in-app purchases, no ads, no data collected.
+
+2. Every feature and how to reach it (all from the home screen, no setup)
+- "Spécial Foot": 100 questions, 3 lives, Game Center leaderboard.
+- "Hardcore": "Tout le foot" or one country; one wrong answer ends the game; one leaderboard each.
+- "Aventure": pick France, then a club on the map; 10 stages per club; finishing every French club unlocks the choice of the next country.
+- "Défi de la semaine" (weekly challenge): every Monday, 10 questions about one football personality, the same for everyone, one attempt per week; recurring weekly Game Center leaderboard "Défi de la semaine".
+- "Derbies": choose a country (France, Spain, Germany, Italy, United Kingdom), then a derby; about 15 questions about the two clubs, replayable, no leaderboard.
+- Pre-match quiz ("Avant-match"): a banner appears on the home screen during the 24 hours before a major league or Champions League match between two clubs of the game; it opens a 10-question quiz on both clubs, replayable until kick-off.
+- "Classement": leaderboards per mode; "Ouvrir dans Game Center" opens the native Game Center screen.
+- Profile (top-right button): badges, choice of name frame, settings (vibrations, reminders), contact button, privacy policy link, app version.
+
+3. Native iOS features
+Game Center leaderboards and 23 achievements (one per badge; the iOS achievement banner appears when a badge is earned); haptic feedback (can be turned off in Profile › Réglages); share sheet for scores; home-screen quick actions (long-press the app icon); App Store rating prompt via SKStoreReviewController; full offline play with bundled content.
+- iCloud: progress (badges, Aventure, played challenges, settings) is copied to the player's own iCloud key-value storage so it comes back after a reinstall or on a new device; the developer never receives it.
+- Local notifications: after the first finished game the app asks permission through the standard iOS prompt. If accepted, it schedules local reminders on the device only (new weekly challenge on Monday, last-day reminder on Sunday if not played, pre-match quizzes the day before). They can be turned off in Profile › Réglages › Rappels. No server, nothing sent.
+
+4. External services
+- Apple Game Center (leaderboards, achievements) and iCloud key-value storage, both handled by Apple.
+- GitHub (raw.githubusercontent.com): the app downloads updated JSON data files (questions, clubs, weekly challenges, upcoming matches) from the public repository github.com/charlit/sportquiz. JSON data only, validated, never code; nothing is sent. The match list comes from football-data.org via a scheduled script; the app never contacts it.
+No analytics, advertising, authentication, payment or AI services.
+
+5. Regions
+French only, distributed in French-speaking countries; identical everywhere.
+
+6. Third-party material
+Original factual trivia written by the developer. Clubs and players are only named as facts; no logos, crests, official photos, videos or branding. Flags are simple drawings. Achievement images use Twemoji artwork (CC-BY 4.0, credited on the support page). Not affiliated with any club, league or federation.

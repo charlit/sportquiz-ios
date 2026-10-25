@@ -59,7 +59,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.charlit.sportquiz
         # Version affichée sur l'App Store, et numéro de build à augmenter à chaque envoi à App Store Connect
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "8"
+        CURRENT_PROJECT_VERSION: "9"
         DEVELOPMENT_TEAM: 32AK299L44
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
