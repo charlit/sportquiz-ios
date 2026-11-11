@@ -58,14 +58,14 @@
  {
   "id": "tour",
   "emoji": "🇫🇷",
-  "name": "Tour de France des clubs",
+  "name": "Tour des clubs français",
   "desc": "Finir les 18 clubs français de l'Aventure",
   "points": 60
  },
  {
   "id": "liga",
   "emoji": "🇪🇸",
-  "name": "Vuelta des clubs",
+  "name": "Tour des clubs espagnols",
   "desc": "Finir les 10 clubs espagnols de l'Aventure",
   "points": 40
  },
@@ -86,7 +86,7 @@
  {
   "id": "calcio",
   "emoji": "🇮🇹",
-  "name": "Giro des clubs",
+  "name": "Tour des clubs italiens",
   "desc": "Finir les 10 clubs italiens de l'Aventure",
   "points": 40
  },
